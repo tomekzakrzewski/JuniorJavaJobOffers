@@ -22,6 +22,7 @@ public class RegisterFacade {
             if (user.isEmpty()) {
                 final User userToSave = UserMapper.mapRegisterUserDtoToUser(registerUserDto);
                 User userSaved = repository.save(userToSave);
+                //create token
                 //TODO send confirmation email
                 return new RegistrationResultDto(userSaved.getId(), true, userSaved.getEmail(), userSaved.isEnabled());
             } else {
@@ -36,9 +37,4 @@ public class RegisterFacade {
                 .map(UserMapper::mapUserDtoToUser)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
-
-
-
-
-
 }
