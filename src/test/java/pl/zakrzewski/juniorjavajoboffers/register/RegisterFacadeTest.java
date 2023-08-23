@@ -11,7 +11,9 @@ import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmail
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserAlreadyExistException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserNotFoundException;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenService;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RegisterFacadeTest {
-    RegisterFacade registerFacade = new RegisterFacade(new InMemoryRegisterRepository(), new InMemoryConfirmationTokenRepository());
+    RegisterFacade registerFacade = new RegisterFacade(new InMemoryRegisterRepository(), new ConfirmationTokenService(new InMemoryConfirmationTokenRepository()));
 
     @Test
     void should_register_user_and_user_not_enabled() {
@@ -93,6 +95,15 @@ public class RegisterFacadeTest {
         assertThrows(TokenNotFoundException.class, () -> {
             registerFacade.findByToken(UUID.randomUUID().toString());
         });
+    }
+
+    @Test
+    void should_set_confirmed_at_as_current_date_when_confirmed() {
+        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        registerFacade.setTokenConfirmed(registrationResultDto.token());
+        assertThat(registerFacade.findByToken(registrationResultDto.token()).getConfirmedAt().equals(LocalDateTime.now()));
+
     }
 }
 

@@ -27,24 +27,16 @@ public class RegisterFacade {
     public static final String USER_WITH_THIS_EMAIL_HAS_ALREADY_SUBSCRIBED = "User with this email has already subscribed";
     private final RegisterRepository repository;
 //    private final EmailSenderFacade emailSender;
-//    private final ConfirmationTokenService confirmationTokenService;
-    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenService confirmationTokenService;
+//    private final ConfirmationTokenRepository confirmationTokenRepository;
     public RegistrationResultDto registerUser(RegisterUserDto registerUserDto) {
         if (EmailValidator.validateEmail(registerUserDto.mail())) {
             Optional<User> user = repository.findByEmail(registerUserDto.mail());
             if (user.isEmpty()) {
                 final User userToSave = UserMapper.mapRegisterUserDtoToUser(registerUserDto);
                 User userSaved = repository.save(userToSave);
-                ConfirmationToken confirmationToken = ConfirmationToken.builder()
-                        .token(UUID.randomUUID().toString())
-                        .createdAt(LocalDateTime.now())
-                        .expiresAt(LocalDateTime.now().plusMinutes(30))
-                        //TODO zaimplementowac jakos date confirmed at, zeby nie byla nullem od poczatku
-                        .user(userSaved)
-                        .build();
-
-
-                ConfirmationToken tokenSaved = confirmationTokenRepository.save(confirmationToken);
+                ConfirmationToken confirmationToken = confirmationTokenService.generateConfirmationToken(userSaved);
+                ConfirmationToken tokenSaved = confirmationTokenService.saveConfirmationToken(confirmationToken);
 //                emailSender.sendConfirmationEmail(userSaved.getEmail(), tokenSaved.getToken());
                 return new RegistrationResultDto(userSaved.getId(), true, userSaved.getEmail(),
                         userSaved.isEnabled(), tokenSaved.getToken());
@@ -62,8 +54,12 @@ public class RegisterFacade {
     }
 
     public ConfirmationTokenDto findByToken(String token) {
-        return confirmationTokenRepository.findByToken(token)
+        return confirmationTokenService.getToken(token)
                 .map(ConfirmationTokenMapper::mapConfirmationTokenToConfirmationTokenDto)
                 .orElseThrow(() -> new TokenNotFoundException(token));
+    }
+
+    public void setTokenConfirmed(String token) {
+        confirmationTokenService.setConfirmedAt(token);
     }
 }
