@@ -10,7 +10,7 @@ public class EmailSenderFacade {
 
     private final JavaMailSender mailSender;
 
-    public void sendConfirmationEmail(UserDto userDto, ConfirmationToken token) {
+    public void sendConfirmationEmail(String email, String token) {
         
     }
 }

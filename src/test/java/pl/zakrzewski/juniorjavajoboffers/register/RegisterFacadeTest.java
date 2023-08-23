@@ -1,20 +1,25 @@
 package pl.zakrzewski.juniorjavajoboffers.register;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterUserDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserAlreadyExistException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserNotFoundException;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RegisterFacadeTest {
-    RegisterFacade registerFacade = new RegisterFacade(new InMemoryRegisterRepository());
+    RegisterFacade registerFacade = new RegisterFacade(new InMemoryRegisterRepository(), new InMemoryConfirmationTokenRepository());
 
     @Test
     void should_register_user_and_user_not_enabled() {
@@ -65,6 +70,30 @@ public class RegisterFacadeTest {
         });
     }
 
+    @Test
+    @Disabled
+    void should_token_not_have_activated_date_when_created() {
+        RegisterUserDto registerUserDto = new RegisterUserDto(("Tomekk"), "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+
+        ConfirmationTokenDto confirmationTokenDto = registerFacade.findByToken(registrationResultDto.token());
+        //TODO zaimplementowac jakos date confirmed at, zeby nie byla nullem od poczatku
+    }
+
+    @Test
+    void should_find_confirmation_token_by_token() {
+        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        ConfirmationTokenDto confirmationTokenDto = registerFacade.findByToken(registrationResultDto.token());
+        assertThat(confirmationTokenDto.getToken().equals(registrationResultDto.token()));
+    }
+
+    @Test
+    void should_throw_exception_when_token_not_found() {
+        assertThrows(TokenNotFoundException.class, () -> {
+            registerFacade.findByToken(UUID.randomUUID().toString());
+        });
+    }
 }
 
 
