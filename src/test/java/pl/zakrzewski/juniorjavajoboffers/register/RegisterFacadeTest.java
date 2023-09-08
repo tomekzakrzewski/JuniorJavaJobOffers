@@ -98,12 +98,35 @@ public class RegisterFacadeTest {
     }
 
     @Test
+    void should_set_user_enabled_true_when_confirmed() {
+        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        registerFacade.setTokenAndUserConfirmed(registrationResultDto.token(), registrationResultDto.email());
+        assertThat(registerFacade.findByEmail("tomekatomek@gmail.com").enabled()).isTrue();
+
+
+    }
+
+    @Test
     void should_set_confirmed_at_as_current_date_when_confirmed() {
         RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
         RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
-        registerFacade.setTokenConfirmed(registrationResultDto.token());
+        registerFacade.setTokenAndUserConfirmed(registrationResultDto.token(), registrationResultDto.email());
         assertThat(registerFacade.findByToken(registrationResultDto.token()).getConfirmedAt().equals(LocalDateTime.now()));
 
+    }
+
+    @Test
+    void should_find_all_emails_of_users_that_confirmed_account() {
+        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        registerFacade.setTokenAndUserConfirmed(registrationResultDto.token(), registrationResultDto.email());
+
+        RegisterUserDto registerUserDtoSecond = new RegisterUserDto("Damian", "domek@gmail.com");
+        RegistrationResultDto registrationResultDtoSecond = registerFacade.registerUser(registerUserDtoSecond);
+
+        assertThat(registerFacade.findEmailsOfConfirmedUsers().size()).isEqualTo(1);
+        assertThat(registerFacade.findEmailsOfConfirmedUsers().stream().findFirst().equals("tomekatomek@gmail.com"));
     }
 }
 

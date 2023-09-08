@@ -13,4 +13,11 @@ public class EmailSenderFacade {
     public void sendConfirmationEmail(String email, String token) {
         
     }
+
+    /*
+    public void sendJobOffersMail(String mail, ) {
+
+    }
+
+     */
 }

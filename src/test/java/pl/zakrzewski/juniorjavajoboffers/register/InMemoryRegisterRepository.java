@@ -39,6 +39,13 @@ public class InMemoryRegisterRepository implements RegisterRepository {
     }
 
     @Override
+    public List<User> getUserByEnabledTrue() {
+        return db.values().stream()
+                .filter(user -> user.isEnabled() == true)
+                .toList();
+    }
+
+    @Override
     public void flush() {
 
     }

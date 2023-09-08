@@ -18,6 +18,7 @@ import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationToken
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,7 +60,15 @@ public class RegisterFacade {
                 .orElseThrow(() -> new TokenNotFoundException(token));
     }
 
-    public void setTokenConfirmed(String token) {
+    public void setTokenAndUserConfirmed(String token, String email) {
         confirmationTokenService.setConfirmedAt(token);
+        repository.findByEmail(email).get().setEnabled(true);
+    }
+
+    public List<String> findEmailsOfConfirmedUsers() {
+        return repository.getUserByEnabledTrue()
+                .stream()
+                .map(user -> user.getEmail())
+                .toList();
     }
 }
