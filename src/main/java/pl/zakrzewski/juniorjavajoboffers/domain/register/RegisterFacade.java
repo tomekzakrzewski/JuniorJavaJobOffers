@@ -1,51 +1,41 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterUserDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserAlreadyExistException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserNotFoundException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationToken;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenMapper;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenRepository;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenService;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class RegisterFacade {
 
     public static final String USER_WITH_THIS_EMAIL_HAS_ALREADY_SUBSCRIBED = "User with this email has already subscribed";
     private final RegisterRepository repository;
-//    private final EmailSenderFacade emailSender;
+    //private final EmailSenderFacade emailSender;
     private final ConfirmationTokenService confirmationTokenService;
-//    private final ConfirmationTokenRepository confirmationTokenRepository;
-    public RegistrationResultDto registerUser(RegisterUserDto registerUserDto) {
-        if (EmailValidator.validateEmail(registerUserDto.mail())) {
-            Optional<User> user = repository.findByEmail(registerUserDto.mail());
+    public RegistrationResultDto registerUser(RegisterRequestDto registerRequestDto) {
+        if (EmailValidator.validateEmail(registerRequestDto.mail())) {
+            Optional<User> user = repository.findByEmail(registerRequestDto.mail());
             if (user.isEmpty()) {
-                final User userToSave = UserMapper.mapRegisterUserDtoToUser(registerUserDto);
+                final User userToSave = UserMapper.mapRegisterUserDtoToUser(registerRequestDto);
                 User userSaved = repository.save(userToSave);
                 ConfirmationToken confirmationToken = confirmationTokenService.generateConfirmationToken(userSaved);
                 ConfirmationToken tokenSaved = confirmationTokenService.saveConfirmationToken(confirmationToken);
-//                emailSender.sendConfirmationEmail(userSaved.getEmail(), tokenSaved.getToken());
+                //emailSender.sendConfirmationEmail(userSaved.getEmail(), tokenSaved.getToken());
                 return new RegistrationResultDto(userSaved.getId(), true, userSaved.getEmail(),
                         userSaved.isEnabled(), tokenSaved.getToken());
             } else {
                 throw new UserAlreadyExistException(USER_WITH_THIS_EMAIL_HAS_ALREADY_SUBSCRIBED);
             }
         }
-        throw new InvalidEmailAddressException(registerUserDto.mail());
+        throw new InvalidEmailAddressException(registerRequestDto.mail());
     }
 
     public UserDto findByEmail(String email) {
@@ -60,9 +50,10 @@ public class RegisterFacade {
                 .orElseThrow(() -> new TokenNotFoundException(token));
     }
 
-    public void setTokenAndUserConfirmed(String token, String email) {
-        confirmationTokenService.setConfirmedAt(token);
-        repository.findByEmail(email).get().setEnabled(true);
+    public ConfirmationTokenResultDto confirmToken(String token) {
+        ConfirmationTokenResultDto confirmationTokenResultDto =  confirmationTokenService.confirmToken(token);
+        repository.enableUser(confirmationTokenService.getToken(token).get().getUser().getEmail());
+        return confirmationTokenResultDto;
     }
 
     public List<String> findEmailsOfConfirmedUsers() {

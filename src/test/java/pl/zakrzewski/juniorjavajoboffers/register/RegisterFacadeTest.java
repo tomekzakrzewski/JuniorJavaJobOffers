@@ -3,10 +3,7 @@ package pl.zakrzewski.juniorjavajoboffers.register;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterUserDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserAlreadyExistException;
@@ -25,8 +22,8 @@ public class RegisterFacadeTest {
 
     @Test
     void should_register_user_and_user_not_enabled() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("tomek", "tomekatomek@gmail.com");
-        RegistrationResultDto result = registerFacade.registerUser(registerUserDto);
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto result = registerFacade.registerUser(registerRequestDto);
 
         assertAll(
                 () -> assertThat(result.created()).isTrue(),
@@ -37,8 +34,8 @@ public class RegisterFacadeTest {
 
     @Test
     void should_find_user_by_email() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("tomek", "tomekatomek@gmail.com");
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
 
         UserDto userDto = registerFacade.findByEmail("tomekatomek@gmail.com");
 
@@ -47,13 +44,13 @@ public class RegisterFacadeTest {
 
     @Test
     void should_throw_exception_when_user_is_already_subscribed() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("tomek", "tomekatomek@gmail.com");
-        RegisterUserDto registerUserDto2 = new RegisterUserDto("andrzej", "tomekatomek@gmail.com");
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("tomek", "tomekatomek@gmail.com");
+        RegisterRequestDto registerRequestDto2 = new RegisterRequestDto("andrzej", "tomekatomek@gmail.com");
 
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
 
         assertThrows(UserAlreadyExistException.class, () -> {
-            RegistrationResultDto registrationResultDto2 = registerFacade.registerUser(registerUserDto2);
+            RegistrationResultDto registrationResultDto2 = registerFacade.registerUser(registerRequestDto2);
         });
     }
 
@@ -66,17 +63,17 @@ public class RegisterFacadeTest {
 
     @Test
     void should_throw_exception_when_email_is_invalid() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("tomek", "asd");
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("tomek", "asd");
         assertThrows(InvalidEmailAddressException.class, () -> {
-            RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+            RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
         });
     }
 
     @Test
     @Disabled
     void should_token_not_have_activated_date_when_created() {
-        RegisterUserDto registerUserDto = new RegisterUserDto(("Tomekk"), "tomekatomek@gmail.com");
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto(("Tomekk"), "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
 
         ConfirmationTokenDto confirmationTokenDto = registerFacade.findByToken(registrationResultDto.token());
         //TODO zaimplementowac jakos date confirmed at, zeby nie byla nullem od poczatku
@@ -84,8 +81,8 @@ public class RegisterFacadeTest {
 
     @Test
     void should_find_confirmation_token_by_token() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
         ConfirmationTokenDto confirmationTokenDto = registerFacade.findByToken(registrationResultDto.token());
         assertThat(confirmationTokenDto.getToken().equals(registrationResultDto.token()));
     }
@@ -99,31 +96,29 @@ public class RegisterFacadeTest {
 
     @Test
     void should_set_user_enabled_true_when_confirmed() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
-        registerFacade.setTokenAndUserConfirmed(registrationResultDto.token(), registrationResultDto.email());
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
+        ConfirmationTokenResultDto confirmationTokenResultDto = registerFacade.confirmToken(registrationResultDto.token());
         assertThat(registerFacade.findByEmail("tomekatomek@gmail.com").enabled()).isTrue();
-
-
     }
 
     @Test
     void should_set_confirmed_at_as_current_date_when_confirmed() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
-        registerFacade.setTokenAndUserConfirmed(registrationResultDto.token(), registrationResultDto.email());
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
+        ConfirmationTokenResultDto confirmationTokenResultDto =  registerFacade.confirmToken(registrationResultDto.token());
         assertThat(registerFacade.findByToken(registrationResultDto.token()).getConfirmedAt().equals(LocalDateTime.now()));
 
     }
 
     @Test
     void should_find_all_emails_of_users_that_confirmed_account() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("Tomek", "tomekatomek@gmail.com");
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerUserDto);
-        registerFacade.setTokenAndUserConfirmed(registrationResultDto.token(), registrationResultDto.email());
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
+        ConfirmationTokenResultDto confirmationTokenResultDto =  registerFacade.confirmToken(registrationResultDto.token());
 
-        RegisterUserDto registerUserDtoSecond = new RegisterUserDto("Damian", "domek@gmail.com");
-        RegistrationResultDto registrationResultDtoSecond = registerFacade.registerUser(registerUserDtoSecond);
+        RegisterRequestDto registerRequestDtoSecond = new RegisterRequestDto("Damian", "domek@gmail.com");
+        RegistrationResultDto registrationResultDtoSecond = registerFacade.registerUser(registerRequestDtoSecond);
 
         assertThat(registerFacade.findEmailsOfConfirmedUsers().size()).isEqualTo(1);
         assertThat(registerFacade.findEmailsOfConfirmedUsers().stream().findFirst().equals("tomekatomek@gmail.com"));

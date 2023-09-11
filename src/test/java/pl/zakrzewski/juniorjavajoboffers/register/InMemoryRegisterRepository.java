@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.FluentQuery;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterRepository;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.User;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +44,13 @@ public class InMemoryRegisterRepository implements RegisterRepository {
         return db.values().stream()
                 .filter(user -> user.isEnabled() == true)
                 .toList();
+    }
+
+    @Override
+    public int enableUser(String email) {
+        db.get(email)
+                .setEnabled(true);
+        return 1;
     }
 
     @Override

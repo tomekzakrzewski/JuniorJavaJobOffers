@@ -1,14 +1,14 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterUserDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
 
 public class UserMapper {
 
-    public static User mapRegisterUserDtoToUser(RegisterUserDto registerUserDto) {
+    public static User mapRegisterUserDtoToUser(RegisterRequestDto registerRequestDto) {
         return User.builder()
-                .email(registerUserDto.mail())
-                .username(registerUserDto.username())
+                .email(registerRequestDto.mail())
+                .username(registerRequestDto.username())
                 .build();
     }
 
