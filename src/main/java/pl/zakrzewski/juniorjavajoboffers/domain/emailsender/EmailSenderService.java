@@ -7,6 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.utils.EmailSenderUtils;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @Log4j2
 public class EmailSenderService {
     private static final String USER_ACCCOUNT_VERIFICATION = "Confirm your account";
+    private static final String JOB_OFFERS = "Job offers for junior java developer position";
     private final JavaMailSender emailSender;
     @Value("${mail.username}")
     private final String fromEmail;
@@ -29,7 +31,7 @@ public class EmailSenderService {
             message.setSubject(USER_ACCCOUNT_VERIFICATION);
             message.setFrom(fromEmail);
             message.setTo(mail);
-            message.setText(token);
+            message.setText(EmailSenderUtils.getEmailConfirmationMessage(host, token));
             emailSender.send(message);
             log.info("Confirmation email send");
         } catch (Exception e) {
@@ -45,7 +47,7 @@ public class EmailSenderService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmail);
             message.setText(offers.stream().toString());
-            message.setSubject("Job offers");
+            message.setSubject(JOB_OFFERS);
             for (String email : emails) {
                 message.setTo(email);
                 emailSender.send(message);

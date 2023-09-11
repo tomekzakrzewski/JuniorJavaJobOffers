@@ -15,12 +15,12 @@ public class RegisterController {
     private final RegisterFacade registerFacade;
 
     @PostMapping
-    public RegistrationResultDto register(@RequestBody RegisterRequestDto request) {
+    public RegistrationResultDto registerUser(@RequestBody RegisterRequestDto request) {
         return registerFacade.registerUser(request);
     }
 
     @GetMapping(path = "confirm")
-    public ConfirmationTokenResultDto confirm (@RequestParam("token") String token) {
+    public ConfirmationTokenResultDto confirmUserAccount (@RequestParam("token") String token) {
         return registerFacade.confirmToken(token);
     }
 

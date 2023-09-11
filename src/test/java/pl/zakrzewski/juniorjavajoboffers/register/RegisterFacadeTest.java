@@ -76,7 +76,6 @@ public class RegisterFacadeTest {
         RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
 
         ConfirmationTokenDto confirmationTokenDto = registerFacade.findByToken(registrationResultDto.token());
-        //TODO zaimplementowac jakos date confirmed at, zeby nie byla nullem od poczatku
     }
 
     @Test
