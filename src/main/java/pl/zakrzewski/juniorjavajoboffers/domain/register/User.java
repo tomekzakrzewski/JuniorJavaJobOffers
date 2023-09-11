@@ -1,6 +1,8 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @AllArgsConstructor
@@ -8,7 +10,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Builder
 @Setter
 @Getter
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @UuidGenerator
     private String id;
     private String username;
     private String email;

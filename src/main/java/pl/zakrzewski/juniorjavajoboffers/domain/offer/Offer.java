@@ -1,9 +1,11 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,7 +14,11 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Entity
+@Table(name = "offers")
 public class Offer {
+    @Id
+    @UuidGenerator
     private String id;
     private String company;
     private String position;

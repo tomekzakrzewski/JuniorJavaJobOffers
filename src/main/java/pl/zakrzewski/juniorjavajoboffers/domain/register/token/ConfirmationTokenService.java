@@ -1,6 +1,7 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register.token;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.User;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenResultDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenAlreadyConfirmed;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
+@Service
 public class ConfirmationTokenService {
 
     private ConfirmationTokenRepository repository;

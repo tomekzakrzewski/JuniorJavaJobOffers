@@ -19,13 +19,13 @@ public class EmailSenderService {
     private static final String USER_ACCCOUNT_VERIFICATION = "Confirm your account";
     private static final String JOB_OFFERS = "Job offers for junior java developer position";
     private final JavaMailSender emailSender;
-    @Value("${mail.username}")
-    private final String fromEmail;
-    @Value("${mail.host}")
-    private final String host;
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+    @Value("${spring.mail.verify.host}")
+    private String host;
 
     @Async
-    public void sendConfimationEmail(String mail, String token) {
+    public void sendConfirmationEmail(String mail, String token) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setSubject(USER_ACCCOUNT_VERIFICATION);

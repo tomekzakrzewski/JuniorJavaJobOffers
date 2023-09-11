@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.CriteriaSearch;
+import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFetchable;
 
 @Configuration
 public class OfferHttpClientConfig {
@@ -19,5 +20,10 @@ public class OfferHttpClientConfig {
         criteriaSearch.setRequirement(new String[] {"Java"});
         criteriaSearch.setSeniority(new String[] { "trainee", "junior" });
         return criteriaSearch;
+    }
+
+    @Bean
+    public OfferFetchable remoteOfferClient(RestTemplate restTemplate, CriteriaSearch criteriaSearch) {
+        return new OfferHttpClient(restTemplate, criteriaSearch);
     }
 }

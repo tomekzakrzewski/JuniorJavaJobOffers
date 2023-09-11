@@ -2,7 +2,6 @@ package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.zakrzewski.juniorjavajoboffers.infrastructure.offer.http.OfferHttpClient;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class OfferService {
     private List<Offer> filterNotExistingOffers(List<Offer> jobOffers) {
         return jobOffers.stream()
                 .distinct()
-                .filter(offer -> !offerRepository.offerExistsByCompanyNameAndPosition(offer.getCompany(), offer.getPosition()))
+                .filter(offer -> !offerRepository.existsOfferByCompanyAndPosition(offer.getCompany(), offer.getPosition()))
                 .toList();
     }
 

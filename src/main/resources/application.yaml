@@ -1,22 +1,38 @@
 #Email Config
-mail:
-  host: smtp.gmail.com
-  port: 587
-  username: juniorjavajoboffers@gmail.com
-  password: pfhdvtnmwkwzizgv
-  default-encoding: UTF-8
-  properties:
-    mail:
-      mime:
-        charset: UTF
-      smtp:
-        writetimeout: 10000
-        connectiontimeout: 10000
-        timeout: 10000
-        auth: true
-        starttls:
-          enable: true
-          required: true
-  verify:
-    host: htttp://localhost:8080
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/JuniorJavaJobOffers
+    username: root
+    password: tomek
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: juniorjavajoboffers@gmail.com
+    password: pfhdvtnmwkwzizgv
+    default-encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF
+        smtp:
+          writetimeout: 10000
+          connectiontimeout: 10000
+          timeout: 10000
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    verify:
+      host: htttp://localhost:8080
 

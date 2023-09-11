@@ -19,7 +19,7 @@ public class RegisterController {
         return registerFacade.registerUser(request);
     }
 
-    @GetMapping(path = "confirm")
+    @GetMapping
     public ConfirmationTokenResultDto confirmUserAccount (@RequestParam("token") String token) {
         return registerFacade.confirmToken(token);
     }
