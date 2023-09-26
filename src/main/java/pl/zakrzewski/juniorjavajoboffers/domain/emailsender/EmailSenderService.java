@@ -27,11 +27,7 @@ public class EmailSenderService {
     @Async
     public void sendConfirmationEmail(String mail, String token) {
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setSubject(USER_ACCCOUNT_VERIFICATION);
-            message.setFrom(fromEmail);
-            message.setTo(mail);
-            message.setText(EmailSenderUtils.getEmailConfirmationMessage(host, token));
+            SimpleMailMessage message = createConfirmationEmail(mail, token);
             emailSender.send(message);
             log.info("Confirmation email send");
         } catch (Exception e) {
@@ -39,23 +35,36 @@ public class EmailSenderService {
             log.info("Confirmation email for token " + token + " not sent");
         }
     }
-
     @Async
     public void sendOffersEmail(List<String> emails, List<OfferDto> offers) {
-        try {
-            log.info("Started sending emails with job offers");
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(fromEmail);
-            message.setText(offers.stream().toString());
-            message.setSubject(JOB_OFFERS);
-            for (String email : emails) {
-                message.setTo(email);
-                emailSender.send(message);
-            }
-            log.info("Sending emails with job offers completed");
-        } catch (Exception e) {
-            System.out.println(e);
-            log.info("Error while sending emails with job offers");
+        SimpleMailMessage message = createOffersEmail(offers);
+        for (String email : emails) {
+            message.setTo(email);
+            emailSender.send(message);
         }
     }
+
+    private SimpleMailMessage createOffersEmail(List<OfferDto> offers) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setText(offers.toString());
+        message.setSubject(JOB_OFFERS);
+        return message;
+    }
+
+    private SimpleMailMessage createConfirmationEmail(String mail, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject(USER_ACCCOUNT_VERIFICATION);
+        message.setFrom(fromEmail);
+        message.setTo(mail);
+        message.setText(EmailSenderUtils.getEmailConfirmationMessage(host, token));
+
+    }
 }
+
+
+
+
+
+
+

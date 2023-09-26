@@ -102,7 +102,7 @@ public class RegisterFacade {
     }
 
     //test
-    public void sendJobOffers() {
-        emailSenderFacade.sendJobOffersEmail(findEmailsOfConfirmedUsers());
-    }
+//    public void sendJobOffers() {
+//        emailSenderFacade.sendJobOffersEmail(findEmailsOfConfirmedUsers());
+//    }
 }

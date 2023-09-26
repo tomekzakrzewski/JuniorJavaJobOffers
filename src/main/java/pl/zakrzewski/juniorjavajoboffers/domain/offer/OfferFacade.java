@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor

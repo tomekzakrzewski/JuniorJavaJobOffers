@@ -38,4 +38,17 @@ public class Offer {
     public int hashCode() {
         return Objects.hash(company, position, salary);
     }
+
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "id='" + id + '\'' +
+                ", company='" + company + '\'' +
+                ", position='" + position + '\'' +
+                ", city='" + city + '\'' +
+                ", salary='" + salary + '\'' +
+                ", url='" + url + '\'' +
+                ", remote=" + remote +
+                '}';
+    }
 }
