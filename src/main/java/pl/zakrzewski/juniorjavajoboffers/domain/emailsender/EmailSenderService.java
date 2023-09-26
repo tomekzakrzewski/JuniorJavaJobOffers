@@ -29,18 +29,25 @@ public class EmailSenderService {
         try {
             SimpleMailMessage message = createConfirmationEmail(mail, token);
             emailSender.send(message);
-            log.info("Confirmation email send");
+            log.info("Confirmation email sent");
         } catch (Exception e) {
             System.out.println(e);
             log.info("Confirmation email for token " + token + " not sent");
         }
     }
+
     @Async
     public void sendOffersEmail(List<String> emails, List<OfferDto> offers) {
-        SimpleMailMessage message = createOffersEmail(offers);
-        for (String email : emails) {
-            message.setTo(email);
-            emailSender.send(message);
+        try {
+            SimpleMailMessage message = createOffersEmail(offers);
+            for (String email : emails) {
+                message.setTo(email);
+                emailSender.send(message);
+            }
+            log.info("Job offers emails sent");
+        } catch (Exception e) {
+            System.out.println(e);
+            log.info("Sending job offers email failed");
         }
     }
 

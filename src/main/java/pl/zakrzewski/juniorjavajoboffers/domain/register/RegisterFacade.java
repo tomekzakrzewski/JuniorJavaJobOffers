@@ -1,7 +1,6 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Component
 public class RegisterFacade {
 
     public static final String USER_WITH_THIS_EMAIL_HAS_ALREADY_SUBSCRIBED = "User with this email has already subscribed";
@@ -54,14 +52,14 @@ public class RegisterFacade {
     public ConfirmationTokenResultDto confirmToken(String token) {
         ConfirmationTokenResultDto confirmationTokenResultDto = confirmationTokenService.confirmToken(token);
         repository.enableUser(confirmationTokenService.getToken(token).get().getUser().getEmail());
-        sendJobOffers();
+//        sendJobOffers();
         return confirmationTokenResultDto;
     }
 
     public List<String> findEmailsOfConfirmedUsers() {
         return repository.getUserByEnabledTrue()
                 .stream()
-                .map(user -> user.getEmail())
+                .map(User::getEmail)
                 .toList();
     }
 
@@ -75,21 +73,17 @@ public class RegisterFacade {
 
     private boolean userExistsByEmail(String email) {
         Optional<User> user = repository.findByEmail(email);
-        if (user.isEmpty()) {
-            return false;
-        }
-        return true;
+        return user.isPresent();
     }
 
     private RegistrationResultDto registrationResult(User user, ConfirmationToken confirmationToken) {
-        RegistrationResultDto registrationResultDto = RegistrationResultDto.builder()
+        return RegistrationResultDto.builder()
                 .id(user.getId())
                 .created(true)
                 .enabled(false)
                 .email(user.getEmail())
                 .token(confirmationToken.getToken())
                 .build();
-        return registrationResultDto;
     }
 
     private User saveUser(RegisterRequestDto registerRequestDto) {
@@ -101,8 +95,4 @@ public class RegisterFacade {
         return confirmationTokenService.saveConfirmationToken(confirmationToken);
     }
 
-    //test
-//    public void sendJobOffers() {
-//        emailSenderFacade.sendJobOffersEmail(findEmailsOfConfirmedUsers());
-//    }
 }
