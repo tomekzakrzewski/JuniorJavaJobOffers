@@ -58,7 +58,7 @@ public class EmailSenderService {
         message.setFrom(fromEmail);
         message.setTo(mail);
         message.setText(EmailSenderUtils.getEmailConfirmationMessage(host, token));
-
+        return message;
     }
 }
 
