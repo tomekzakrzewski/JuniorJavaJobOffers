@@ -1,4 +1,4 @@
-package pl.zakrzewski.juniorjavajoboffers.offer;
+package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;

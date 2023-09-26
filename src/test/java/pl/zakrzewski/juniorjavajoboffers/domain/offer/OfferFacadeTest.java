@@ -1,8 +1,6 @@
-package pl.zakrzewski.juniorjavajoboffers.offer;
+package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
 import org.junit.jupiter.api.Test;
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferList;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferResponse;
 

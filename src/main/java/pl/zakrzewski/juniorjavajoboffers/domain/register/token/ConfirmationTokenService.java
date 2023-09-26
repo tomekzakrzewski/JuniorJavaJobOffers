@@ -29,11 +29,10 @@ public class ConfirmationTokenService {
     public ConfirmationTokenResultDto confirmToken(String token) {
         ConfirmationToken confirmationToken = repository.findByToken(token)
                         .orElseThrow(() -> new TokenNotFoundException(token));
-        if (confirmationToken.getConfirmedAt() != null) {
+        if (isTokenConfirmed(confirmationToken)) {
             throw new TokenAlreadyConfirmed(token);
         }
-        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-        if (expiredAt.isBefore(LocalDateTime.now())) {
+        if (isTokenExpired(confirmationToken)) {
             throw new TokenHasExpired(token);
         }
         repository.updateConfirmedAt(token, LocalDateTime.now());
@@ -48,6 +47,21 @@ public class ConfirmationTokenService {
                 .user(user)
                 .build();
 
+    }
+
+    private boolean isTokenConfirmed(ConfirmationToken confirmationToken) {
+        if (confirmationToken.getConfirmedAt() != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isTokenExpired(ConfirmationToken confirmationToken) {
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            return true;
+        }
+        return false;
     }
 
 

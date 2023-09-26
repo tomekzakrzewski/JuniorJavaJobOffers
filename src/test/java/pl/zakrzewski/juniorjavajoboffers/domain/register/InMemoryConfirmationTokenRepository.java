@@ -1,4 +1,4 @@
-package pl.zakrzewski.juniorjavajoboffers.register;
+package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package pl.zakrzewski.juniorjavajoboffers.offer;
+package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFetchable;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferList;

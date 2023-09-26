@@ -1,8 +1,7 @@
-package pl.zakrzewski.juniorjavajoboffers.register;
+package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;

@@ -1,8 +1,5 @@
-package pl.zakrzewski.juniorjavajoboffers.offer;
+package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferList;
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferService;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferResponse;
 
 import java.util.List;

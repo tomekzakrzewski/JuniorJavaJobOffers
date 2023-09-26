@@ -7,7 +7,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class OfferService {
+class OfferService {
     //todo
     //fetch offer and save not existing ones
     //fetch offers

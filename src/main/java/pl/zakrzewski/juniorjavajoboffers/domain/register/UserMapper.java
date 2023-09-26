@@ -3,7 +3,7 @@ package pl.zakrzewski.juniorjavajoboffers.domain.register;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
 
-public class UserMapper {
+class UserMapper {
 
     public static User mapRegisterUserDtoToUser(RegisterRequestDto registerRequestDto) {
         return User.builder()

@@ -1,4 +1,4 @@
-package pl.zakrzewski.juniorjavajoboffers.emailsender;
+package pl.zakrzewski.juniorjavajoboffers.domain.emailsender;
 
 import org.junit.jupiter.api.Test;
 
