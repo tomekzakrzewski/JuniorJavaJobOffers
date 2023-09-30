@@ -1,0 +1,23 @@
+<body>
+<table border="1">
+        <thead>
+        <tr>
+            <th>Company</th>
+            <th>Position</th>
+            <th>Salary</th>
+            <th>Remote</th>
+            <th>URL</th>
+        </tr>
+        </thead>
+    <tbody>
+    <tr th:each="offer : ${offerList}">
+        <td th:text="${offer.company}"></td>
+        <td th:text="${offer.position}"></td>
+        <td th:text="${offer.salary}"></td>
+        <td th:text="${offer.remote}"></td>
+        <td th:text="${offer.url}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

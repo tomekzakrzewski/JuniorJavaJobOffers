@@ -1,9 +1,8 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.emailsender;
 
-import jakarta.mail.BodyPart;
-import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +13,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.utils.EmailSenderUtils;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 
 import java.util.List;
@@ -28,36 +26,30 @@ import static pl.zakrzewski.juniorjavajoboffers.domain.emailsender.utils.EmailSe
 public class EmailSenderService {
     private static final String USER_ACCOUNT_VERIFICATION = "Confirm your account";
     private static final String JOB_OFFERS = "Job offers for junior java developer position";
-    public static final String EMAIL_TEMPLATE = "emailtemplate";
-    public static final String TEXT_HTML_ENCONDING = "text/html";
     private static final String UTF_8_ENCODING = "UTF-8";
+    private static final String CONFIRMATION_EMAIL_TEMPLATE = "confirmationemailtemplate";
+    private static final String OFFERS_EMAIL_TEMPLATE = "joboffersemailtemplate";
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
     @Value("${spring.mail.username}")
     private String fromEmail;
     @Value("${spring.mail.verify.host}")
     private String host;
-//
-//    @Async
-//    public void sendConfirmationEmail(String mail, String token) {
-//        try {
-//            SimpleMailMessage message = createConfirmationEmail(mail, token);
-//            emailSender.send(message);
-//            log.info("Confirmation email sent");
-//        } catch (Exception e) {
-//            System.out.println(e);
-//            log.info("Confirmation email for token " + token + " not sent");
-//        }
-//    }
 
     @Async
     public void sendConfirmationEmail(String toEmail, String token) {
-        sendConfirmationMailx(toEmail, token);
-
+        try {
+            MimeMessage confirmationEmail = createConfimationEmail(toEmail, token);
+            emailSender.send(confirmationEmail);
+            log.info("Confirmation email sent");
+        } catch (Exception e) {
+            System.out.println(e);
+            log.info("Error while sending confirmation email");
+        }
     }
 
     @Async
-    public void sendOffersEmail(List<String> emails, List<OfferDto> offers) {
+    public void sendOffersEmailTest(List<String> emails, List<OfferDto> offers) {
         try {
             SimpleMailMessage message = createOffersEmail(offers);
             for (String email : emails) {
@@ -65,6 +57,21 @@ public class EmailSenderService {
                 emailSender.send(message);
             }
             log.info("Job offers emails sent");
+        } catch (Exception e) {
+            System.out.println(e);
+            log.info("Sending job offers email failed");
+        }
+    }
+
+    @Async
+    public void sendOffersEmail(List<String> emails, List<OfferDto> offers) {
+        try {
+            MimeMessage jobOffersEmail = createJobOffersEmail(offers);
+            for (String email : emails) {
+                jobOffersEmail.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+                emailSender.send(jobOffersEmail);
+        }
+            log.info("Job offers email sent");
         } catch (Exception e) {
             System.out.println(e);
             log.info("Sending job offers email failed");
@@ -79,21 +86,11 @@ public class EmailSenderService {
         return message;
     }
 
-    private SimpleMailMessage createConfirmationEmail(String mail, String token) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject(USER_ACCOUNT_VERIFICATION);
-        message.setFrom(fromEmail);
-        message.setTo(mail);
-        message.setText(EmailSenderUtils.getEmailConfirmationMessage(host, token));
-        return message;
-    }
-
-    @Async
-    public void sendConfirmationMailx(String toEmail, String token) {
+    private MimeMessage createConfimationEmail(String toEmail, String token) {
         try {
             Context context = new Context();
-            context.setVariables(Map.of("name", "Tomek", "url", getVerificationUrl(host, token)));
-            String text = templateEngine.process("emailtemplate", context);
+            context.setVariables(Map.of("url", getVerificationUrl(host, token)));
+            String text = templateEngine.process(CONFIRMATION_EMAIL_TEMPLATE, context);
             MimeMessage message = getMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
             helper.setPriority(1);
@@ -101,26 +98,34 @@ public class EmailSenderService {
             helper.setFrom(fromEmail);
             helper.setTo(toEmail);
             helper.setText(text, true);
-
-//            // Add images to the email body
-//            BodyPart imageBodyPart = new MimeBodyPart();
-//            DataSource dataSource = new FileDataSource(System.getProperty("user.home") + "/Downloads/images/dog.jpg");
-//            imageBodyPart.setDataHandler(new DataHandler(dataSource));
-//            imageBodyPart.setHeader("Content-ID", "image");
-//            mimeMultipart.addBodyPart(imageBodyPart);
-
-            emailSender.send(message);
+            return message;
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
             throw new RuntimeException(exception.getMessage());
         }
-
     }
 
     private MimeMessage getMimeMessage() {
         return emailSender.createMimeMessage();
     }
 
+    private MimeMessage createJobOffersEmail(List<OfferDto> offers) {
+        try {
+            Context context = new Context();
+            context.setVariables(Map.of("offerList", offers));
+            String text = templateEngine.process(OFFERS_EMAIL_TEMPLATE, context);
+            MimeMessage message = getMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
+            helper.setPriority(1);
+            helper.setSubject(JOB_OFFERS);
+            helper.setFrom(fromEmail);
+            helper.setText(text, true);
+            return message;
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
+        }
+    }
 
 }
 

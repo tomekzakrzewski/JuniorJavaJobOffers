@@ -13,9 +13,18 @@ public class OfferDto {
     private String url;
     private boolean remote;
 
+    public static class OfferDtoBuilder {
+        public OfferDtoBuilder url(String url) {
+            this.url = "https://nofluffjobs.com/job/" + url;
+            return this;
+        }
+    }
+
     @Override
     public String toString() {
         return company + " " + position + " " +  salary + " " + "https://nofluffjobs.com/job/" + url +
                 " is remote: " + remote + "\n";
     }
+
+
 }
