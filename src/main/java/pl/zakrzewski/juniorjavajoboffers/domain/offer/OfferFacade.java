@@ -32,7 +32,8 @@ public class OfferFacade {
     }
 
     public void sendEmailWithJobOffers() {
-        emailSenderFacade.sendJobOffersEmail(fetchAllOffersSaveAllIfNotExists(), registerFacade.findEmailsOfConfirmedUsers());
+        emailSenderFacade.sendJobOffersEmail(fetchAllOffersSaveAllIfNotExists(),
+                registerFacade.findEmailsOfConfirmedUsers());
     }
 
 

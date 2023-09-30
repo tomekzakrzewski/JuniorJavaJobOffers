@@ -1,4 +1,4 @@
-#Email Config
+#database
 spring:
   main:
     allow-circular-references: true
@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-
+#email config
   mail:
     host: smtp.gmail.com
     port: 587
@@ -35,4 +35,11 @@ spring:
             required: true
     verify:
       host: http://localhost:8080
-
+#http
+offer:
+  http:
+    client:
+      config:
+        connectionTimeout: 1000
+        readTimeout: 1000
+        uri: https://nofluffjobs.com/api/search/posting?page=1&salaryCurrency=PLN&salaryPeriod=month&region=pl

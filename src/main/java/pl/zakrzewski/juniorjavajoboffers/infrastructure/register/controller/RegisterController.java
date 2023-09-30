@@ -11,7 +11,6 @@ import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultD
 @RequestMapping("/api/v1/registration")
 @AllArgsConstructor
 public class RegisterController {
-
     private final RegisterFacade registerFacade;
 
     @PostMapping
