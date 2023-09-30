@@ -49,21 +49,6 @@ public class EmailSenderService {
     }
 
     @Async
-    public void sendOffersEmailTest(List<String> emails, List<OfferDto> offers) {
-        try {
-            SimpleMailMessage message = createOffersEmail(offers);
-            for (String email : emails) {
-                message.setTo(email);
-                emailSender.send(message);
-            }
-            log.info("Job offers emails sent");
-        } catch (Exception e) {
-            System.out.println(e);
-            log.info("Sending job offers email failed");
-        }
-    }
-
-    @Async
     public void sendOffersEmail(List<String> emails, List<OfferDto> offers) {
         try {
             MimeMessage jobOffersEmail = createJobOffersEmail(offers);
@@ -76,14 +61,6 @@ public class EmailSenderService {
             System.out.println(e);
             log.info("Sending job offers email failed");
         }
-    }
-
-    private SimpleMailMessage createOffersEmail(List<OfferDto> offers) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(fromEmail);
-        message.setText(offers.toString());
-        message.setSubject(JOB_OFFERS);
-        return message;
     }
 
     private MimeMessage createConfimationEmail(String toEmail, String token) {
@@ -105,10 +82,6 @@ public class EmailSenderService {
         }
     }
 
-    private MimeMessage getMimeMessage() {
-        return emailSender.createMimeMessage();
-    }
-
     private MimeMessage createJobOffersEmail(List<OfferDto> offers) {
         try {
             Context context = new Context();
@@ -127,6 +100,9 @@ public class EmailSenderService {
         }
     }
 
+    private MimeMessage getMimeMessage() {
+        return emailSender.createMimeMessage();
+    }
 }
 
 
