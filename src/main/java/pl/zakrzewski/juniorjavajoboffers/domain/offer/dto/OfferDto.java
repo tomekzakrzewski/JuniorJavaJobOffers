@@ -1,10 +1,12 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.offer.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
+@AllArgsConstructor
 public class OfferDto {
     private String company;
     private String position;

@@ -25,7 +25,7 @@ public class RegisterController {
 
     @GetMapping("/unsubscribe")
     public void unsubscribeUserAccount(@RequestParam("id") String id) {
-         registerFacade.unsubscribeUserFromNewsletter(id);
+         registerFacade.deleteUserAndConfirmationToken(id);
 
     }
 

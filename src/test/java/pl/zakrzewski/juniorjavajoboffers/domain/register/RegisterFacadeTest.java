@@ -1,6 +1,5 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
@@ -75,15 +74,6 @@ public class RegisterFacadeTest {
     }
 
     @Test
-    @Disabled
-    void should_token_not_have_activated_date_when_created() {
-        RegisterRequestDto registerRequestDto = new RegisterRequestDto(("Tomekk"), "tomekatomek@gmail.com");
-        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
-
-        ConfirmationTokenDto confirmationTokenDto = registerFacade.findByToken(registrationResultDto.token());
-    }
-
-    @Test
     void should_find_confirmation_token_by_token() {
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
         RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
@@ -127,6 +117,18 @@ public class RegisterFacadeTest {
         assertThat(registerFacade.findEmailsAndIdsOfConfirmedUsers().size()).isEqualTo(1);
         assertThat(registerFacade.findEmailsAndIdsOfConfirmedUsers().stream().findFirst().equals("tomekatomek@gmail.com"));
     }
+
+    @Test
+    void should_delete_user_when_unsubscribing_from_newsletter() {
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto registrationResultDto = registerFacade.registerUser(registerRequestDto);
+        UserDto userDto = registerFacade.findByEmail("tomekatomek@gmail.com");
+        String id = userDto.id();
+        registerFacade.deleteUserAndConfirmationToken(id);
+        assertThrows(UserNotFoundException.class, () -> registerFacade.findByEmail("tomekatomek@gmail.com"));
+    }
+
+
 }
 
 

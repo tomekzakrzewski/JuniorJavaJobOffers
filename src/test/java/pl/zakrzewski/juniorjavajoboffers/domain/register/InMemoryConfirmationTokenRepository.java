@@ -28,9 +28,9 @@ public class InMemoryConfirmationTokenRepository implements ConfirmationTokenRep
     public void deleteConfirmationTokenByUser_Id(String userId) {
         Optional<ConfirmationToken> token = db.values()
                 .stream()
-                .filter(t -> t.getId().equals(userId))
+                .filter(t -> t.getUser().getId().equals(userId))
                 .findFirst();
-        String tokenId = token.get().getId();
+        String tokenId = token.get().getToken();
         db.remove(tokenId);
     }
 

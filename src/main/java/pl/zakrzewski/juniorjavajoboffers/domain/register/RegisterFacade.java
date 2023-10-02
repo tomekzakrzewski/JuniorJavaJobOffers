@@ -62,7 +62,7 @@ public class RegisterFacade {
                 .toList();
     }
 
-    public String unsubscribeUserFromNewsletter(String id) {
+    public String deleteUserAndConfirmationToken(String id) {
         confirmationTokenService.deleteConfirmationTokenByUserId(id);
         return repository.deleteUserById(id);
     }
