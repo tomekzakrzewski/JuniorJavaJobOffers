@@ -6,10 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.Offer;
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,7 +19,7 @@ public class InMemoryOfferRepository implements OfferRepository {
 
     Map<String, Offer> database = new ConcurrentHashMap<>();
     @Override
-    public boolean offerExistsByCompanyNameAndPosition(String company, String position) {
+    public boolean existsOfferByCompanyAndPosition(String company, String position) {
         long count = database.values()
                 .stream()
                 .filter(offer -> offer.getCompany().equals(company) && offer.getPosition().equals(position))
@@ -199,4 +196,5 @@ public class InMemoryOfferRepository implements OfferRepository {
     public Page<Offer> findAll(Pageable pageable) {
         return null;
     }
+
 }

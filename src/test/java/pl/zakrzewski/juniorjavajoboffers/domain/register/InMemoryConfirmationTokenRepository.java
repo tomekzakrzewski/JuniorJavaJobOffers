@@ -25,6 +25,16 @@ public class InMemoryConfirmationTokenRepository implements ConfirmationTokenRep
     }
 
     @Override
+    public void deleteConfirmationTokenByUser_Id(String userId) {
+        Optional<ConfirmationToken> token = db.values()
+                .stream()
+                .filter(t -> t.getId().equals(userId))
+                .findFirst();
+        String tokenId = token.get().getId();
+        db.remove(tokenId);
+    }
+
+    @Override
      public <S extends ConfirmationToken> S save(S entity) {
         UUID id = UUID.randomUUID();
         ConfirmationToken confirmationToken = ConfirmationToken.builder()
@@ -39,10 +49,11 @@ public class InMemoryConfirmationTokenRepository implements ConfirmationTokenRep
     }
 
     @Override
-    public void updateConfirmedAt(String token, LocalDateTime now) {
+    public int updateConfirmedAt(String token, LocalDateTime now) {
             ConfirmationToken confirmationToken = db.get(token);
             confirmationToken.setConfirmedAt(now);
             db.replace(token, confirmationToken);
+        return 0;
     }
 
     @Override

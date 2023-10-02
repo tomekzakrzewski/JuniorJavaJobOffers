@@ -2,6 +2,7 @@ package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
@@ -15,9 +16,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 public class RegisterFacadeTest {
-    RegisterFacade registerFacade = new RegisterFacade(new InMemoryRegisterRepository(), new ConfirmationTokenService(new InMemoryConfirmationTokenRepository()));
+    EmailSenderFacade emailSenderFacade = mock(EmailSenderFacade.class);
+    RegisterFacade registerFacade =  new RegisterFacade(
+            new InMemoryRegisterRepository(),
+            emailSenderFacade,
+            new ConfirmationTokenService(new InMemoryConfirmationTokenRepository()));
 
     @Test
     void should_register_user_and_user_not_enabled() {

@@ -1,12 +1,19 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
+import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferResponse;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
 
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 public class OfferFacadeTestConfiguration {
     private final InMemoryOfferRepository offerRepository;
     private final InMemoryFetcherTestImpl inMemoryFetcherTest;
+    EmailSenderFacade emailSenderFacade = mock(EmailSenderFacade.class);
+    RegisterFacade registerFacade = mock(RegisterFacade.class);
+
 
     OfferFacadeTestConfiguration() {
         List<OfferResponse> offerResponse = List.of(
@@ -37,7 +44,7 @@ public class OfferFacadeTestConfiguration {
     }
 
     OfferFacade offerFacadeForTests() {
-        return new OfferFacade(new OfferService(inMemoryFetcherTest, offerRepository));
+        return new OfferFacade(new OfferService(inMemoryFetcherTest, offerRepository), registerFacade, emailSenderFacade);
     }
 
 

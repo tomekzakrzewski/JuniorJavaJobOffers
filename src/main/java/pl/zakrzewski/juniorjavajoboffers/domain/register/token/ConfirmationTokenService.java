@@ -50,8 +50,8 @@ public class ConfirmationTokenService {
 
     }
 
-    public void deleteConfirmationTokenByUser(User user) {
-        repository.deleteConfirmationTokenByUser(user);
+    public void deleteConfirmationTokenByUserId(String userId) {
+        repository.deleteConfirmationTokenByUser_Id(userId);
     }
 
     private boolean isTokenConfirmed(ConfirmationToken confirmationToken) {

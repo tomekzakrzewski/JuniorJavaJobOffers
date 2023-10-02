@@ -47,6 +47,13 @@ public class InMemoryRegisterRepository implements RegisterRepository {
     }
 
     @Override
+    public String deleteUserById(String id) {
+        User user = db.get(id);
+        db.remove(id);
+        return user.getId();
+    }
+
+    @Override
     public int enableUser(String email) {
         db.get(email)
                 .setEnabled(true);

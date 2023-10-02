@@ -10,14 +10,11 @@ import java.util.Optional;
 
 public interface RegisterRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
-    @Transactional
-    String deleteUserByEmail(String emai);
 
     List<User> getUserByEnabledTrue();
 
     @Transactional
     String deleteUserById(String id);
-
 
     @Transactional
     @Modifying
