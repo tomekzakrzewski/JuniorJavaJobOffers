@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.User;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenResultDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenAlreadyConfirmed;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenHasExpired;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
@@ -47,6 +48,10 @@ public class ConfirmationTokenService {
                 .user(user)
                 .build();
 
+    }
+
+    public void deleteConfirmationTokenByUser(User user) {
+        repository.deleteConfirmationTokenByUser(user);
     }
 
     private boolean isTokenConfirmed(ConfirmationToken confirmationToken) {

@@ -52,7 +52,6 @@ public class RegisterFacade {
     public ConfirmationTokenResultDto confirmToken(String token) {
         ConfirmationTokenResultDto confirmationTokenResultDto = confirmationTokenService.confirmToken(token);
         repository.enableUser(confirmationTokenService.getToken(token).get().getUser().getEmail());
-//        sendJobOffers();
         return confirmationTokenResultDto;
     }
 
@@ -61,6 +60,20 @@ public class RegisterFacade {
                 .stream()
                 .map(User::getEmail)
                 .toList();
+    }
+
+    public String unsubscribeUserFromNewsletter(String email) {
+        Optional<User> user = repository.findByEmail(email);
+        deleteConfirmationTokenByUser(user.get());
+        return deleteUserByEmail(email);
+    }
+
+    private String deleteUserByEmail(String id) {
+        return repository.deleteUserByEmail(id);
+    }
+
+    private void deleteConfirmationTokenByUser(User user) {
+        confirmationTokenService.deleteConfirmationTokenByUser(user);
     }
 
     private boolean validateEmail(String email) {

@@ -23,4 +23,10 @@ public class RegisterController {
         return registerFacade.confirmToken(token);
     }
 
+    @GetMapping("/unsubscribe")
+    public void unsubscribeUserAccount(@RequestParam("email") String email) {
+         registerFacade.unsubscribeUserFromNewsletter(email);
+
+    }
+
 }

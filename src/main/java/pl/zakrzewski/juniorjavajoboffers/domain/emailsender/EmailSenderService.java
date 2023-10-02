@@ -1,6 +1,7 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.emailsender;
 
 import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 import java.util.List;
 import java.util.Map;
 
+import static pl.zakrzewski.juniorjavajoboffers.domain.emailsender.utils.EmailSenderUtils.getUnsubscribeUrl;
 import static pl.zakrzewski.juniorjavajoboffers.domain.emailsender.utils.EmailSenderUtils.getVerificationUrl;
 
 @Service
@@ -51,10 +53,11 @@ public class EmailSenderService {
     @Async
     public void sendOffersEmail(List<String> emails, List<OfferDto> offers) {
         try {
-            MimeMessage jobOffersEmail = createJobOffersEmail(offers);
             for (String email : emails) {
-                jobOffersEmail.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-                emailSender.send(jobOffersEmail);
+                Context context = addUnsubscribeEmail(email);
+                MimeMessage message = createJobOffersEmail(offers, context);
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+                emailSender.send(message);
         }
             log.info("Job offers email sent");
         } catch (Exception e) {
@@ -69,10 +72,7 @@ public class EmailSenderService {
             context.setVariables(Map.of("url", getVerificationUrl(host, token)));
             String text = templateEngine.process(CONFIRMATION_EMAIL_TEMPLATE, context);
             MimeMessage message = getMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
-            helper.setPriority(1);
-            helper.setSubject(USER_ACCOUNT_VERIFICATION);
-            helper.setFrom(fromEmail);
+            MimeMessageHelper helper = getHelper(USER_ACCOUNT_VERIFICATION, message);
             helper.setTo(toEmail);
             helper.setText(text, true);
             return message;
@@ -82,16 +82,12 @@ public class EmailSenderService {
         }
     }
 
-    private MimeMessage createJobOffersEmail(List<OfferDto> offers) {
+    private MimeMessage createJobOffersEmail(List<OfferDto> offers, Context context) {
         try {
-            Context context = new Context();
             context.setVariables(Map.of("offerList", offers));
             String text = templateEngine.process(OFFERS_EMAIL_TEMPLATE, context);
             MimeMessage message = getMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
-            helper.setPriority(1);
-            helper.setSubject(JOB_OFFERS);
-            helper.setFrom(fromEmail);
+            MimeMessageHelper helper = getHelper(JOB_OFFERS, message);
             helper.setText(text, true);
             return message;
         } catch (Exception exception) {
@@ -100,6 +96,21 @@ public class EmailSenderService {
         }
     }
 
+    private Context addUnsubscribeEmail(String toEmail) {
+        Context context = new Context();
+        context.setVariable("url", getUnsubscribeUrl(host, toEmail));
+        return context;
+    }
+
+
+    private MimeMessageHelper getHelper(String subject, MimeMessage message) throws MessagingException {
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
+        helper.setPriority(1);
+        helper.setSubject(subject);
+        helper.setFrom(fromEmail);
+        return helper;
+    }
+    
     private MimeMessage getMimeMessage() {
         return emailSender.createMimeMessage();
     }
