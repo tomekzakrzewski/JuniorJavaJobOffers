@@ -1,7 +1,6 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
@@ -33,7 +32,7 @@ public class OfferFacade {
 
     public void sendEmailWithJobOffers() {
         emailSenderFacade.sendJobOffersEmail(fetchAllOffersSaveAllIfNotExists(),
-                registerFacade.findEmailsOfConfirmedUsers());
+                registerFacade.findEmailsAndIdsOfConfirmedUsers());
     }
 
 

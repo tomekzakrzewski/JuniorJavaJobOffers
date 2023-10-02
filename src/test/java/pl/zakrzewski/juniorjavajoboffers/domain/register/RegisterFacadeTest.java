@@ -118,8 +118,8 @@ public class RegisterFacadeTest {
         RegisterRequestDto registerRequestDtoSecond = new RegisterRequestDto("Damian", "domek@gmail.com");
         RegistrationResultDto registrationResultDtoSecond = registerFacade.registerUser(registerRequestDtoSecond);
 
-        assertThat(registerFacade.findEmailsOfConfirmedUsers().size()).isEqualTo(1);
-        assertThat(registerFacade.findEmailsOfConfirmedUsers().stream().findFirst().equals("tomekatomek@gmail.com"));
+        assertThat(registerFacade.findEmailsAndIdsOfConfirmedUsers().size()).isEqualTo(1);
+        assertThat(registerFacade.findEmailsAndIdsOfConfirmedUsers().stream().findFirst().equals("tomekatomek@gmail.com"));
     }
 }
 

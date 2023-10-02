@@ -8,6 +8,7 @@ import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.exceptions.OffersNot
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.EmailAndIdDto;
 
 import java.util.List;
 
@@ -21,12 +22,12 @@ public class EmailSenderFacade {
     }
 
     //scheduler
-    public void sendJobOffersEmail(List<OfferDto> offers, List<String> emails) {
-        if (emails.isEmpty())
+    public void sendJobOffersEmail(List<OfferDto> offers, List<EmailAndIdDto> users) {
+        if (users.isEmpty())
             throw new ConfirmedUsersNotFound();
         if (offers.isEmpty())
             throw new OffersNotFound();
-        emailSenderService.sendOffersEmail(emails, offers);
+        emailSenderService.sendOffersEmail(users, offers);
     }
 
 }

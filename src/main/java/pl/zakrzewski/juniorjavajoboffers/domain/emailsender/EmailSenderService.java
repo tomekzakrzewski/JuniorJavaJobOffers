@@ -7,7 +7,6 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.EmailAndIdDto;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class EmailSenderService {
     @Async
     public void sendConfirmationEmail(String toEmail, String token) {
         try {
-            MimeMessage confirmationEmail = createConfimationEmail(toEmail, token);
+            MimeMessage confirmationEmail = createConfirmationEmail(toEmail, token);
             emailSender.send(confirmationEmail);
             log.info("Confirmation email sent");
         } catch (Exception e) {
@@ -51,12 +51,12 @@ public class EmailSenderService {
     }
 
     @Async
-    public void sendOffersEmail(List<String> emails, List<OfferDto> offers) {
+    public void sendOffersEmail(List<EmailAndIdDto> users, List<OfferDto> offers) {
         try {
-            for (String email : emails) {
-                Context context = addUnsubscribeEmail(email);
+            for (EmailAndIdDto user : users) {
+                Context context = addUnsubscribe(user.id());
                 MimeMessage message = createJobOffersEmail(offers, context);
-                message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(user.email()));
                 emailSender.send(message);
         }
             log.info("Job offers email sent");
@@ -66,7 +66,7 @@ public class EmailSenderService {
         }
     }
 
-    private MimeMessage createConfimationEmail(String toEmail, String token) {
+    private MimeMessage createConfirmationEmail(String toEmail, String token) {
         try {
             Context context = new Context();
             context.setVariables(Map.of("url", getVerificationUrl(host, token)));
@@ -96,9 +96,9 @@ public class EmailSenderService {
         }
     }
 
-    private Context addUnsubscribeEmail(String toEmail) {
+    private Context addUnsubscribe(String id) {
         Context context = new Context();
-        context.setVariable("url", getUnsubscribeUrl(host, toEmail));
+        context.setVariable("url", getUnsubscribeUrl(host, id));
         return context;
     }
 
@@ -110,7 +110,7 @@ public class EmailSenderService {
         helper.setFrom(fromEmail);
         return helper;
     }
-    
+
     private MimeMessage getMimeMessage() {
         return emailSender.createMimeMessage();
     }

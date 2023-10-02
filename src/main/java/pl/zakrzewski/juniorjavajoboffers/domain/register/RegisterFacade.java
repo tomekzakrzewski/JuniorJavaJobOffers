@@ -55,26 +55,19 @@ public class RegisterFacade {
         return confirmationTokenResultDto;
     }
 
-    public List<String> findEmailsOfConfirmedUsers() {
+    public List<EmailAndIdDto> findEmailsAndIdsOfConfirmedUsers() {
         return repository.getUserByEnabledTrue()
                 .stream()
-                .map(User::getEmail)
+                .map(UserMapper::mapUserToEmailAndIdDto)
                 .toList();
     }
 
-    public String unsubscribeUserFromNewsletter(String email) {
-        Optional<User> user = repository.findByEmail(email);
-        deleteConfirmationTokenByUser(user.get());
-        return deleteUserByEmail(email);
+    public String unsubscribeUserFromNewsletter(String id) {
+        Optional<User> user = repository.findById(id);
+        confirmationTokenService.deleteConfirmationTokenByUser(user.get());
+        return repository.deleteUserById(id);
     }
 
-    private String deleteUserByEmail(String id) {
-        return repository.deleteUserByEmail(id);
-    }
-
-    private void deleteConfirmationTokenByUser(User user) {
-        confirmationTokenService.deleteConfirmationTokenByUser(user);
-    }
 
     private boolean validateEmail(String email) {
         return EmailValidator.validateEmail(email);

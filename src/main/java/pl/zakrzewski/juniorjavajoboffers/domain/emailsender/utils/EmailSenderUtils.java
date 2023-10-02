@@ -9,8 +9,8 @@ public class EmailSenderUtils {
         return host + "/api/v1/registration?token=" + token;
     }
 
-    public static String getUnsubscribeUrl(String host, String email) {
-        return host + "/api/v1/registration/unsubscribe?email=" + email;
+    public static String getUnsubscribeUrl(String host, String id) {
+        return host + "/api/v1/registration/unsubscribe?id=" + id;
     }
 
 }
