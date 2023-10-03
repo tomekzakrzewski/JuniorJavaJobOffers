@@ -1,14 +1,11 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.emailsender;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.exceptions.ConfirmedUsersNotFound;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.exceptions.OffersNotFound;
-import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.EmailAndIdDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserIdEmailDto;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public class EmailSenderFacade {
     }
 
     //scheduler
-    public void sendJobOffersEmail(List<OfferDto> offers, List<EmailAndIdDto> users) {
+    public void sendJobOffersEmail(List<OfferDto> offers, List<UserIdEmailDto> users) {
         if (users.isEmpty())
             throw new ConfirmedUsersNotFound();
         if (offers.isEmpty())

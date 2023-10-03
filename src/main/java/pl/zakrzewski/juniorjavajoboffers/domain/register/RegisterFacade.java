@@ -55,7 +55,7 @@ public class RegisterFacade {
         return confirmationTokenResultDto;
     }
 
-    public List<EmailAndIdDto> findEmailsAndIdsOfConfirmedUsers() {
+    public List<UserIdEmailDto> findEmailsAndIdsOfConfirmedUsers() {
         return repository.getUserByEnabledTrue()
                 .stream()
                 .map(UserMapper::mapUserToEmailAndIdDto)

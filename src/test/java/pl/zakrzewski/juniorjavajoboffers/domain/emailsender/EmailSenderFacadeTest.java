@@ -1,12 +1,10 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.emailsender;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.thymeleaf.TemplateEngine;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.exceptions.ConfirmedUsersNotFound;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.exceptions.OffersNotFound;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.EmailAndIdDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserIdEmailDto;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +22,8 @@ public class EmailSenderFacadeTest {
     void should_throw_exception_when_no_new_offers_found() {
         List<OfferDto> offers = Arrays.asList(
         );
-        List<EmailAndIdDto> users = Arrays.asList(
-                new EmailAndIdDto("tomek@gmail.com", UUID.randomUUID().toString())
+        List<UserIdEmailDto> users = Arrays.asList(
+                new UserIdEmailDto("tomek@gmail.com", UUID.randomUUID().toString())
         );
 
         assertThrows(OffersNotFound.class, () -> emailSenderFacade.sendJobOffersEmail(offers, users));
@@ -36,7 +34,7 @@ public class EmailSenderFacadeTest {
         List<OfferDto> offers = Arrays.asList(
                 new OfferDto("ABCD", "abcd", "7000-8000", "Warsaw", "asd.com", false)
         );
-        List<EmailAndIdDto> users = Arrays.asList(
+        List<UserIdEmailDto> users = Arrays.asList(
         );
 
         assertThrows(ConfirmedUsersNotFound.class, () -> emailSenderFacade.sendJobOffersEmail(offers, users));
@@ -51,10 +49,10 @@ public class EmailSenderFacadeTest {
                 new OfferDto("ABCD", "abcd", "6000-7000", "Warsaw", "abcd.com", true)
         );
 
-        List<EmailAndIdDto> users = Arrays.asList(
-                new EmailAndIdDto("tomek@gmail.com", UUID.randomUUID().toString()),
-                new EmailAndIdDto("marek@gmail.com", UUID.randomUUID().toString()),
-                new EmailAndIdDto("kuba@gmail.com", UUID.randomUUID().toString())
+        List<UserIdEmailDto> users = Arrays.asList(
+                new UserIdEmailDto("tomek@gmail.com", UUID.randomUUID().toString()),
+                new UserIdEmailDto("marek@gmail.com", UUID.randomUUID().toString()),
+                new UserIdEmailDto("kuba@gmail.com", UUID.randomUUID().toString())
         );
         emailSenderFacade.sendJobOffersEmail(offers, users);
         verify(emailSenderService).sendOffersEmail(users, offers);

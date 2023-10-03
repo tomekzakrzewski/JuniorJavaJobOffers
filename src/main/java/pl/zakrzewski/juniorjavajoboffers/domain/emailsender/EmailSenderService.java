@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.EmailAndIdDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserIdEmailDto;
 
 import java.util.List;
 import java.util.Map;
@@ -51,14 +51,14 @@ public class EmailSenderService {
     }
 
     @Async
-    public void sendOffersEmail(List<EmailAndIdDto> users, List<OfferDto> offers) {
+    public void sendOffersEmail(List<UserIdEmailDto> users, List<OfferDto> offers) {
         try {
-            for (EmailAndIdDto user : users) {
+            for (UserIdEmailDto user : users) {
                 Context context = addUnsubscribe(user.id());
                 MimeMessage message = createJobOffersEmail(offers, context);
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(user.email()));
                 emailSender.send(message);
-        }
+            }
             log.info("Job offers email sent");
         } catch (Exception e) {
             System.out.println(e);

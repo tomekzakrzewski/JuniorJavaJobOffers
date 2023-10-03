@@ -4,6 +4,7 @@ import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferResponse;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
@@ -31,9 +32,10 @@ public class OfferFacadeTestConfiguration {
                         new OfferResponse.Salary(3000L, 6000L)),
                 new OfferResponse("Stu", "Junior Java", "7", new OfferResponse.Location(true),
                         new OfferResponse.Salary(4000L, 8000L))
-                );
+        );
 
-        OfferList offerList = new OfferList(offerResponse);
+        OfferList offerList = new OfferList();
+        offerList.setOffers(offerResponse);
         this.offerRepository = new InMemoryOfferRepository();
         this.inMemoryFetcherTest = new InMemoryFetcherTestImpl(offerList);
     }

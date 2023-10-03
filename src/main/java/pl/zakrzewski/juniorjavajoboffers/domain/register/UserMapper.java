@@ -1,6 +1,6 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.EmailAndIdDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserIdEmailDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
 
@@ -31,8 +31,8 @@ class UserMapper {
                 .build();
     }
 
-    public static EmailAndIdDto mapUserToEmailAndIdDto(User user) {
-        return EmailAndIdDto.builder()
+    public static UserIdEmailDto mapUserToEmailAndIdDto(User user) {
+        return UserIdEmailDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .build();
