@@ -6,7 +6,7 @@ public class EmailSenderUtils {
     }
 
     public static String getVerificationUrl(String host, String token) {
-        return host + "/api/v1/registration?token=" + token;
+        return host + "/api/v1/registration/confirm?token=" + token;
     }
 
     public static String getUnsubscribeUrl(String host, String id) {

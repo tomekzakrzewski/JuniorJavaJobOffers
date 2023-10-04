@@ -63,10 +63,18 @@ public class RegisterFacade {
     }
 
     public String deleteUserAndConfirmationToken(String id) {
-        confirmationTokenService.deleteConfirmationTokenByUserId(id);
-        return repository.deleteUserById(id);
+        if (userExistsById(id)) {
+            confirmationTokenService.deleteConfirmationTokenByUserId(id);
+            return repository.deleteUserById(id);
+        }
+        throw new UserNotFoundException(id);
     }
 
+
+    private boolean userExistsById(String id) {
+        Optional<User> user =  repository.findById(id);
+        return user.isPresent();
+    }
 
     private boolean validateEmail(String email) {
         return EmailValidator.validateEmail(email);

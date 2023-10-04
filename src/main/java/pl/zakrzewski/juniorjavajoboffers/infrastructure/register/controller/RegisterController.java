@@ -1,6 +1,7 @@
 package pl.zakrzewski.juniorjavajoboffers.infrastructure.register.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
@@ -20,16 +21,16 @@ public class RegisterController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping
+    @PostMapping("/confirm")
     public ResponseEntity<ConfirmationTokenResultDto> confirmUserAccount (@RequestParam("token") String token) {
         ConfirmationTokenResultDto confirmationTokenResultDto = registerFacade.confirmToken(token);
         return ResponseEntity.ok(confirmationTokenResultDto);
     }
 
-    @GetMapping("/unsubscribe")
-    public void unsubscribeUserAccount(@RequestParam("id") String id) {
+    @RequestMapping(value = "/unsubscribe", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> unsubscribeUserAccount(@RequestParam("id") String id) {
          registerFacade.deleteUserAndConfirmationToken(id);
-
+         return ResponseEntity.noContent().build();
     }
 
 }

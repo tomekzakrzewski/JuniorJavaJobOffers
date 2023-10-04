@@ -68,7 +68,4 @@ public class ConfirmationTokenService {
         }
         return false;
     }
-
-
-
 }
