@@ -21,7 +21,7 @@ public class RegisterController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/confirm")
+    @GetMapping
     public ResponseEntity<ConfirmationTokenResultDto> confirmUserAccount (@RequestParam("token") String token) {
         ConfirmationTokenResultDto confirmationTokenResultDto = registerFacade.confirmToken(token);
         return ResponseEntity.ok(confirmationTokenResultDto);

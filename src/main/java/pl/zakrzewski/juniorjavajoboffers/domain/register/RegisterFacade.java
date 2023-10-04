@@ -66,8 +66,9 @@ public class RegisterFacade {
         if (userExistsById(id)) {
             confirmationTokenService.deleteConfirmationTokenByUserId(id);
             return repository.deleteUserById(id);
+        } else {
+            throw new UserNotFoundException(id);
         }
-        throw new UserNotFoundException(id);
     }
 
 
