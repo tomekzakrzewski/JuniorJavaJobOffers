@@ -63,6 +63,14 @@ public class InMemoryRegisterRepository implements RegisterRepository {
                 .setEnabled(true);
         return 1;
     }
+    @Override
+    public Optional<User> findById(String id) {
+        Optional<User> user = db.values()
+                .stream()
+                .filter(u -> u.getId().equals(id))
+                .findFirst();
+        return user;
+    }
 
     @Override
     public void flush() {
@@ -155,10 +163,7 @@ public class InMemoryRegisterRepository implements RegisterRepository {
         return null;
     }
 
-    @Override
-    public Optional<User> findById(String s) {
-        return Optional.empty();
-    }
+
 
     @Override
     public boolean existsById(String s) {
