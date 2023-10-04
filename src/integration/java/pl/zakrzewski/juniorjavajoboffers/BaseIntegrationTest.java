@@ -1,5 +1,6 @@
 package pl.zakrzewski.juniorjavajoboffers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,10 @@ public class BaseIntegrationTest {
     @Autowired
     public MockMvc mockMvc;
     @Container
-    private static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8");
+    public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8");
+
+    @Autowired
+    public ObjectMapper objectMapper;
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -33,5 +37,6 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+//        registry.add("offer.http.client.config.uri", () -> WIRE_MOCK_HOST);
     }
 }
