@@ -30,7 +30,8 @@ public class OfferHttpClientConfig {
     }
 
     @Bean
-    public OfferFetchable remoteOfferClient(RestTemplate restTemplate, CriteriaSearch criteriaSearch) {
-        return new OfferHttpClient(restTemplate, criteriaSearch);
+    public OfferFetchable remoteOfferClient(RestTemplate restTemplate, CriteriaSearch criteriaSearch,
+                                            @Value("${offer.http.client.config.uri}") String uri) {
+        return new OfferHttpClient(restTemplate, criteriaSearch, uri);
     }
 }
