@@ -25,7 +25,9 @@ public class BaseIntegrationTest {
     @Autowired
     public MockMvc mockMvc;
     @Container
-    public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8");
+    public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.1.0")
+            .withPassword("root")
+            .withUsername("root");
 
     @Autowired
     public ObjectMapper objectMapper;
@@ -34,9 +36,12 @@ public class BaseIntegrationTest {
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort())
             .build();
+
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySQLContainer::getUsername);
+        registry.add("spring.datasource.password", mySQLContainer::getPassword);
 //        registry.add("offer.http.client.config.uri", () -> WIRE_MOCK_HOST);
     }
 }
