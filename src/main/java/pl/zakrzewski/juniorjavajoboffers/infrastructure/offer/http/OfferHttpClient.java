@@ -24,7 +24,6 @@ public class OfferHttpClient implements OfferFetchable {
 
     private final RestTemplate restTemplate;
     private final CriteriaSearch criteriaSearch;
-//    private final static String NOFLUFFJOBS_URL = "https://nofluffjobs.com/api/search/posting?page=1&salaryCurrency=PLN&salaryPeriod=month&region=pl";
     private final String uri;
     public List<OfferResponse> fetchOffersFromNofluffjobs() {
         log.info("Started fetching offers from NoFluffJobs");
