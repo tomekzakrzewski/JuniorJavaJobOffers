@@ -3,7 +3,7 @@ spring:
   main:
     allow-circular-references: true
   datasource:
-    url: jdbc:mysql://localhost:3306/JuniorJavaJobOffers
+    url: jdbc:mysql://localhost:3306/junior-offers
     username: root
     password: tomek
   jpa:
