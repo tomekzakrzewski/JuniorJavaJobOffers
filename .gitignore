@@ -1,6 +1,9 @@
 /target/
 HELP.md
 /.idea
+.mvn
+mvnw
+mvnw.cmd
 !.mvn/wrapper/maven-wrapper.jar
 # Java annotation processor (APT)
 .factorypath
