@@ -1,4 +1,5 @@
 /target/
+HELP.md
 /.idea
 !.mvn/wrapper/maven-wrapper.jar
 # Java annotation processor (APT)
