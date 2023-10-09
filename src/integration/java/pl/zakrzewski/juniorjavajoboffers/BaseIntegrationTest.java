@@ -2,6 +2,9 @@ package pl.zakrzewski.juniorjavajoboffers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetup;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -36,6 +41,11 @@ public class BaseIntegrationTest {
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort())
             .build();
+
+    @RegisterExtension
+    public static GreenMailExtension greenMail = new GreenMailExtension(ServerSetup.SMTP.port(2525))
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("tomek", "tomek"))
+            .withPerMethodLifecycle(false);
 
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
