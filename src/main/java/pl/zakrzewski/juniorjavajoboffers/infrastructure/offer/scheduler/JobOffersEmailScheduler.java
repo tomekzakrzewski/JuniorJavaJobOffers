@@ -12,7 +12,7 @@ import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFacade;
 public class JobOffersEmailScheduler {
     private final OfferFacade offerFacade;
 
-    @Scheduled(cron = "0 58 14 * * *")
+    @Scheduled(cron = "${offer.sendEmailOcurrence}")
     public void sendJobOffers() {
         offerFacade.sendEmailWithJobOffers();
         log.info("sending job offers");
