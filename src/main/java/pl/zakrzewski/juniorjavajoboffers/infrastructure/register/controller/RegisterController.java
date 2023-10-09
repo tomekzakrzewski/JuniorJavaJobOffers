@@ -18,7 +18,7 @@ public class RegisterController {
     @PostMapping
     public ResponseEntity<RegistrationResultDto> registerUser(@RequestBody RegisterRequestDto request) {
         RegistrationResultDto result = registerFacade.registerUser(request);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping
@@ -32,5 +32,4 @@ public class RegisterController {
          registerFacade.deleteUserAndConfirmationToken(id);
          return ResponseEntity.noContent().build();
     }
-
 }
