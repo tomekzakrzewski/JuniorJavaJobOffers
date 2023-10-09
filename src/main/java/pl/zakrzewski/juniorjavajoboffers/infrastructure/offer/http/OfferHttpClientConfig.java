@@ -17,7 +17,7 @@ public class OfferHttpClientConfig {
     public RestTemplate restTemplate() {
         return new RestTemplateBuilder()
                 .setConnectTimeout(Duration.ofMillis(1000))
-                .setReadTimeout(Duration.ofMillis(1000))
+                .setReadTimeout(Duration.ofMillis(5000))
                 .build();
     }
 
