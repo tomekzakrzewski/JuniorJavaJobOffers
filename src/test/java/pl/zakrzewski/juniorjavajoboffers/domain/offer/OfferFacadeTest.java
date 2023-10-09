@@ -30,19 +30,19 @@ public class OfferFacadeTest {
         OfferList offerList = new OfferList(
                 List.of(
                         new OfferResponse("ABCD", "abcd", "abcd",
-                                new OfferResponse.Location(false), new OfferResponse.Salary(5000L, 6000L)
+                                new OfferResponse.Location(false), new OfferResponse.Salary(5000L, 6000L), 1696587756840L
                         ),
                         new OfferResponse("EFGH", "efgx", "efgh",
-                                new OfferResponse.Location(false), new OfferResponse.Salary(5000L, 6000L)
+                                new OfferResponse.Location(false), new OfferResponse.Salary(5000L, 6000L), 1696587756840L
                         ),
                         new OfferResponse("IJKL", "ijkl", "ijkl",
-                                new OfferResponse.Location(true), new OfferResponse.Salary(8000L, 9000L)
+                                new OfferResponse.Location(true), new OfferResponse.Salary(8000L, 9000L), 1696587756840L
                         ),
                         new OfferResponse("Google", "Junior Java developer", "https://google.com",
-                                new OfferResponse.Location(true), new OfferResponse.Salary(8000L, 9000L)
+                                new OfferResponse.Location(true), new OfferResponse.Salary(8000L, 9000L), 1696587756840L
                         ),
                         new OfferResponse("Google", "Junior Java developer", "https://google.com",
-                                new OfferResponse.Location(true), new OfferResponse.Salary(8000L, 9000L)
+                                new OfferResponse.Location(true), new OfferResponse.Salary(8000L, 9000L), 1696587756840L
                         )
                 )
         );

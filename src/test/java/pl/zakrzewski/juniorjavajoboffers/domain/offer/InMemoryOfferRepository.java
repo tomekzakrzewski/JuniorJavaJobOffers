@@ -27,6 +27,14 @@ public class InMemoryOfferRepository implements OfferRepository {
         return count == 1;
     }
 
+    @Override
+    public boolean existsOfferByPostedAndCompany(String company, Long posted) {
+        long count = database.values()
+                .stream()
+                .filter(offer -> offer.getCompany().equals(company) && offer.getPosted().equals(posted))
+                .count();
+        return count == 1;
+    }
 
     @Override
     public <S extends Offer> S save(S entity) {
