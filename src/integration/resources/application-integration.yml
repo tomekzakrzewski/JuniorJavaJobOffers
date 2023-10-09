@@ -1,0 +1,14 @@
+spring:
+  mail:
+    host: 127.0.0.1
+    port: 2525
+    username: tomek
+    password: tomek
+    default-encoding: UTF-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: false
+            required: false
