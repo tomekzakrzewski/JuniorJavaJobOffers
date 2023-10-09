@@ -25,7 +25,7 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
     @Test
     public void should_user_register_and_confirm_account_and_system_send_job_offers() throws Exception {
 
-        // step 1: user made POST to /register with username=someusername and email=tomek@gmail.com
+        // step 1: user made POST to /register with username=Tomek and email=tomek@gmail.com
         RegisterRequestDto request = new RegisterRequestDto("Tomek", "tomek@gmail.com");
         ResultActions successRegisterRequest = mockMvc.perform(post("/api/v1/registration")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -36,13 +36,9 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
         RegistrationResultDto registrationResultDto = objectMapper.readValue(json, RegistrationResultDto.class);
         String token = registrationResultDto.token();
 
-
         // step 2: user made GET to /registration?token= with generated token and confirmed account
-
         ResultActions successConfirmToken = mockMvc.perform(get("/api/v1/registration?token=" + token)
-                .contentType(MediaType.APPLICATION_JSON)
-        );
-
+                .contentType(MediaType.APPLICATION_JSON));
         MvcResult confirmTokenResult = successConfirmToken.andExpect(status().isOk()).andReturn();
 
 
@@ -56,7 +52,8 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
                 )
         );
 
-        // step 2:
+        // step 4: system fetches job offers and sends email
+
 
     }
 }
