@@ -1,8 +1,6 @@
 package pl.zakrzewski.juniorjavajoboffers.feature;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import jakarta.mail.internet.MimeMessage;
-import org.hibernate.sql.results.graph.embeddable.internal.AggregateEmbeddableResultImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,13 +9,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.zakrzewski.juniorjavajoboffers.BaseIntegrationTest;
 import pl.zakrzewski.juniorjavajoboffers.SampleOfferResponse;
-import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFetchable;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultDto;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,8 +55,17 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
                 )
         );
 
+
+
         // step 4: system fetches job offers and sends email
 
+
+        //step  : user made POST to /unsubscribe with ID and unsubscribed
+        String userId = registrationResultDto.id();
+        ResultActions successUnsubscribe = mockMvc.perform(post("/api/v1/registration/unsubscribe?id=" + userId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        MvcResult mvcResult2 = successUnsubscribe.andExpect(status().isNoContent()).andReturn();
 
 
 
