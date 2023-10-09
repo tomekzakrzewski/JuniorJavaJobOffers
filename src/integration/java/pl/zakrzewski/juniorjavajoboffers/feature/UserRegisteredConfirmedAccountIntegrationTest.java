@@ -4,67 +4,59 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import pl.zakrzewski.juniorjavajoboffers.BaseIntegrationTest;
+import pl.zakrzewski.juniorjavajoboffers.SampleOfferResponse;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFetchable;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultDto;
 
-public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrationTest {
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrationTest implements SampleOfferResponse {
 
     @Autowired
     OfferFetchable offerFetchable;
 
     @Test
-    public void should_user_register_and_confirm_account_and_system_send_job_offers() {
+    public void should_user_register_and_confirm_account_and_system_send_job_offers() throws Exception {
 
+        // step 1: user made POST to /register with username=someusername and email=tomek@gmail.com
+        RegisterRequestDto request = new RegisterRequestDto("Tomek", "tomek@gmail.com");
+        ResultActions successRegisterRequest = mockMvc.perform(post("/api/v1/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
+
+        MvcResult mvcResult = successRegisterRequest.andExpect(status().isCreated()).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        RegistrationResultDto registrationResultDto = objectMapper.readValue(json, RegistrationResultDto.class);
+        String token = registrationResultDto.token();
+
+
+        // step 2: user made GET to /registration?token= with generated token and confirmed account
+
+        ResultActions successConfirmToken = mockMvc.perform(get("/api/v1/registration?token=" + token)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        MvcResult confirmTokenResult = successConfirmToken.andExpect(status().isOk()).andReturn();
+
+
+        // step 3: external service returns job offers
         wireMockServer.stubFor(WireMock.post("/")
                 .withRequestBody(WireMock.matching(".*"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                                                {
-                                  "postings": [
-                                    {
-                                      "name": "Some startp",
-                                      "location": {
-                                        "fullyRemote": true
-                                      },
-                                      "title": "Junior Java Developer ",
-                                      "url": "junior-java-developer-startup",
-                                      "salary": {
-                                        "from": 7000,
-                                        "to": 9000
-                                      }
-                                    },
-                                    {
-                                      "name": "I love programming",
-                                      "location": {
-                                        "fullyRemote": true
-                                      },
-                                      "title": "Junior Software Engineer",
-                                      "url": "java-software-engineer-i-love-programming",
-                                      "salary": {
-                                        "from": 5000,
-                                        "to": 9000
-                                      }
-                                    },
-                                    {
-                                      "name": "Java world",
-                                      "location": {
-                                        "fullyRemote": false
-                                      },
-                                      "title": "Junior Java Developer",
-                                      "url": "junior-java-developer-java-world",
-                                      "salary": {
-                                        "from": 6000,
-                                        "to": 8000
-                                      }
-                                    }
-                                  ]
-                                }
-                                                                                                """)
+                        .withBody(bodyWithThreeOffersJson())
                 )
         );
 
-        offerFetchable.fetchOffersFromNofluffjobs();
+        // step 2:
+
     }
 }
