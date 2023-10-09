@@ -1,6 +1,4 @@
 #databas
-Podoba mi się
-e
 spring:
   main:
     allow-circular-references: true
@@ -40,6 +38,7 @@ spring:
     protocol: smtp
 #http
 offer:
+  sendEmailOcurrence: "0 00 19 * * *"
   http:
     client:
       config:
