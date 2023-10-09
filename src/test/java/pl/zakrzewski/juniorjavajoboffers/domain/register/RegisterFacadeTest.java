@@ -1,21 +1,25 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
+import net.bytebuddy.asm.Advice;
+import org.checkerframework.checker.units.qual.C;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
+import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderService;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserAlreadyExistException;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserNotFoundException;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.*;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationToken;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenRepository;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenService;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class RegisterFacadeTest {
     EmailSenderFacade emailSenderFacade = mock(EmailSenderFacade.class);
@@ -128,7 +132,36 @@ public class RegisterFacadeTest {
         assertThrows(UserNotFoundException.class, () -> registerFacade.findByEmail("tomekatomek@gmail.com"));
     }
 
+    @Test
+    void should_send_confirmation_email_after_user_register() {
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto result = registerFacade.registerUser(registerRequestDto);
+        verify(emailSenderFacade).sendConfirmationEmail(result.email(), result.token());
+    }
 
+    @Disabled
+    @Test
+    void should_token_expire_after_30_minutes() {
+        ConfirmationTokenRepository repository = mock(ConfirmationTokenRepository.class);
+        ConfirmationTokenService confirmationTokenService = new ConfirmationTokenService(repository);
+        ConfirmationToken confirmationToken = ConfirmationToken.builder()
+                .token(UUID.randomUUID().toString())
+                .expiresAt(LocalDateTime.now().minusMinutes(30))
+                .build();
+        String token = confirmationToken.getToken();
+        when(repository.findByToken(token)).thenReturn(Optional.of(confirmationToken));
+        registerFacade.confirmToken(token);
+    }
+
+    @Test
+    void should_throw_exception_if_confirmation_token_already_confirmed() {
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("tomek", "tomekatomek@gmail.com");
+        RegistrationResultDto result = registerFacade.registerUser(registerRequestDto);
+        String token = result.token();
+        registerFacade.confirmToken(token);
+
+        assertThrows(TokenAlreadyConfirmed.class, () -> registerFacade.confirmToken(token));
+    }
 }
 
 
