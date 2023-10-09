@@ -1,4 +1,6 @@
-#database
+#databas
+Podoba mi się
+e
 spring:
   main:
     allow-circular-references: true
@@ -35,6 +37,7 @@ spring:
             required: true
     verify:
       host: http://localhost:8080
+    protocol: smtp
 #http
 offer:
   http:
