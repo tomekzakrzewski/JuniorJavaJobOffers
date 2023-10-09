@@ -27,7 +27,7 @@ public class RegisterController {
         return ResponseEntity.ok(confirmationTokenResultDto);
     }
 
-    @RequestMapping(value = "/unsubscribe", method = RequestMethod.DELETE)
+    @PostMapping("/unsubscribe")
     public ResponseEntity<Void> unsubscribeUserAccount(@RequestParam("id") String id) {
          registerFacade.deleteUserAndConfirmationToken(id);
          return ResponseEntity.noContent().build();
