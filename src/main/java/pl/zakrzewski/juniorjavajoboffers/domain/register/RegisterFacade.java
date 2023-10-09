@@ -22,7 +22,7 @@ public class RegisterFacade {
     private final EmailSenderFacade emailSenderFacade;
     private final ConfirmationTokenService confirmationTokenService;
 
-    public RegistrationResultDto registerUser(RegisterRequestDto registerRequestDto) {
+    public RegisterResultDto registerUser(RegisterRequestDto registerRequestDto) {
         if (validateEmail(registerRequestDto.mail())) {
             if (!userExistsByEmail(registerRequestDto.mail())) {
                 User user = saveUser(registerRequestDto);
@@ -90,8 +90,8 @@ public class RegisterFacade {
         return user.isPresent();
     }
 
-    private RegistrationResultDto registrationResult(User user, ConfirmationToken confirmationToken) {
-        return RegistrationResultDto.builder()
+    private RegisterResultDto registrationResult(User user, ConfirmationToken confirmationToken) {
+        return RegisterResultDto.builder()
                 .id(user.getId())
                 .created(true)
                 .enabled(false)

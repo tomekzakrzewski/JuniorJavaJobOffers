@@ -14,7 +14,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-#email config
+  mvc:
+    pathmatch:
+      matching-strategy:  ANT_PATH_MATCHER
+  #email config
   mail:
     host: smtp.gmail.com
     port: 587
@@ -45,3 +48,4 @@ offer:
         connectionTimeout: 1000
         readTimeout: 1000
         uri: https://nofluffjobs.com/api/search/posting?page=1&salaryCurrency=PLN&salaryPeriod=month&region=pl
+

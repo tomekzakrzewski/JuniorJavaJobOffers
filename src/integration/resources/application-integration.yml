@@ -12,3 +12,5 @@ spring:
           starttls:
             enable: false
             required: false
+offer:
+  sendEmailOcurrence: "0 00 19 * * *"

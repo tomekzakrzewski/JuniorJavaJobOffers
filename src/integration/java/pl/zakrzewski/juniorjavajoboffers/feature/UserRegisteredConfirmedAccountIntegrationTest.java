@@ -10,8 +10,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import pl.zakrzewski.juniorjavajoboffers.BaseIntegrationTest;
 import pl.zakrzewski.juniorjavajoboffers.SampleOfferResponse;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFetchable;
+import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferResponse;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterResultDto;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrationTest implements SampleOfferResponse {
+    private static int TIMEOUT = 5000;
 
     @Autowired
     OfferFetchable offerFetchable;
@@ -35,9 +39,9 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
 
         MvcResult mvcResult = successRegisterRequest.andExpect(status().isCreated()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
-        RegistrationResultDto registrationResultDto = objectMapper.readValue(json, RegistrationResultDto.class);
-        String token = registrationResultDto.token();
-        assertThat(greenMail.waitForIncomingEmail(5000, 1)).isTrue();
+        RegisterResultDto registerResultDto = objectMapper.readValue(json, RegisterResultDto.class);
+        String token = registerResultDto.token();
+        assertThat(greenMail.waitForIncomingEmail(TIMEOUT, 1)).isTrue();
 
         // step 2: user made GET to /registration?token= with generated token and confirmed account
         ResultActions successConfirmToken = mockMvc.perform(get("/api/v1/registration?token=" + token)
@@ -56,17 +60,17 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
         );
 
 
-
-        // step 4: system fetches job offers and sends email
+        // step 4: system fetches job offers at given time and sends email
+        List<OfferResponse> offers = offerFetchable.fetchOffersFromNofluffjobs();
+        assertThat(offers.size()).isEqualTo(3);
 
 
         //step  : user made POST to /unsubscribe with ID and unsubscribed
-        String userId = registrationResultDto.id();
+        String userId = registerResultDto.id();
         ResultActions successUnsubscribe = mockMvc.perform(post("/api/v1/registration/unsubscribe?id=" + userId)
                 .contentType(MediaType.APPLICATION_JSON));
 
-        MvcResult mvcResult2 = successUnsubscribe.andExpect(status().isNoContent()).andReturn();
-
+        successUnsubscribe.andExpect(status().isNoContent()).andReturn();
 
 
     }

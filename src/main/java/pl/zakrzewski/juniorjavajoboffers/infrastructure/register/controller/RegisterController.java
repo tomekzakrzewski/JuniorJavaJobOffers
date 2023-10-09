@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenResultDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegistrationResultDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterResultDto;
 
 @RestController
 @RequestMapping("/api/v1/registration")
@@ -16,8 +16,8 @@ public class RegisterController {
     private final RegisterFacade registerFacade;
 
     @PostMapping
-    public ResponseEntity<RegistrationResultDto> registerUser(@RequestBody RegisterRequestDto request) {
-        RegistrationResultDto result = registerFacade.registerUser(request);
+    public ResponseEntity<RegisterResultDto> registerUser(@RequestBody RegisterRequestDto request) {
+        RegisterResultDto result = registerFacade.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 

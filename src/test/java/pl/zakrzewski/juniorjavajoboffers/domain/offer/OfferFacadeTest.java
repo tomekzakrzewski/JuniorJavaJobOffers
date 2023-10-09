@@ -3,13 +3,11 @@ package pl.zakrzewski.juniorjavajoboffers.domain.offer;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderService;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferResponse;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserIdEmailDto;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
