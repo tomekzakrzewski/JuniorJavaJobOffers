@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface OfferRepository extends JpaRepository<Offer, String> {
 
     boolean existsOfferByCompanyAndPosition(String companyName, String position);
+    boolean existsOfferByCompanyAndPosted(String companyName, Long posted);
 }

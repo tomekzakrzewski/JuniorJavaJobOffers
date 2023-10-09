@@ -13,6 +13,7 @@ public class OfferResponse {
     private String url;
     private Location location;
     private Salary salary;
+    private Long posted;
 
 
     @Data

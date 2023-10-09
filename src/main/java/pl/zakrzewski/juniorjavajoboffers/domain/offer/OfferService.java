@@ -35,7 +35,7 @@ class OfferService {
     private List<Offer> filterNotExistingOffers(List<Offer> jobOffers) {
         return jobOffers.stream()
                 .distinct()
-                .filter(offer -> !offerRepository.existsOfferByCompanyAndPosition(offer.getCompany(), offer.getPosition()))
+                .filter(offer -> !offerRepository.existsOfferByCompanyAndPosted(offer.getCompany(), offer.getPosted()))
                 .toList();
     }
 

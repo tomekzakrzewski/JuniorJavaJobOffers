@@ -26,29 +26,18 @@ public class Offer {
     private String salary;
     private String url;
     private boolean remote;
+    private Long posted;
 
+    // if company name, position name and time posted is the same, offer is the same
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Offer offer)) return false;
-        return Objects.equals(company, offer.company) && Objects.equals(position, offer.position) && Objects.equals(salary, offer.salary);
+        return Objects.equals(company, offer.company) && Objects.equals(position, offer.position) && Objects.equals(posted, offer.posted);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(company, position, salary);
-    }
-
-    @Override
-    public String toString() {
-        return "Offer{" +
-                "id='" + id + '\'' +
-                ", company='" + company + '\'' +
-                ", position='" + position + '\'' +
-                ", city='" + city + '\'' +
-                ", salary='" + salary + '\'' +
-                ", url='" + url + '\'' +
-                ", remote=" + remote +
-                '}';
+        return Objects.hash(company, position, posted);
     }
 }

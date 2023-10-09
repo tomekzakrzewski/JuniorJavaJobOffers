@@ -34,6 +34,7 @@ public class OfferMapper {
                 .salary(offerResponse.getSalary().getFrom().toString() + " - " + offerResponse.getSalary().getTo())
                 .url(offerResponse.getUrl())
                 .remote(offerResponse.getLocation().isFullyRemote())
+                .posted(offerResponse.getPosted())
                 .build();
     }
 
