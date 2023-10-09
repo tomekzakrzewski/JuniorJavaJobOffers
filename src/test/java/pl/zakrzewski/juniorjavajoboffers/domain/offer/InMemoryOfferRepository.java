@@ -28,7 +28,7 @@ public class InMemoryOfferRepository implements OfferRepository {
     }
 
     @Override
-    public boolean existsOfferByPostedAndCompany(String company, Long posted) {
+    public boolean existsOfferByCompanyAndPosted(String company, Long posted) {
         long count = database.values()
                 .stream()
                 .filter(offer -> offer.getCompany().equals(company) && offer.getPosted().equals(posted))
