@@ -11,17 +11,9 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class OfferFacade {
-
     private final OfferService offerService;
     private final RegisterFacade registerFacade;
     private final EmailSenderFacade emailSenderFacade;
-
-    /*
-    todo
-    find all offers
-    fetch and save all not existing offers
-    find offers from today
-     */
 
     public List<OfferDto> fetchAllOffersSaveAllIfNotExists() {
         return offerService.fetchAllOffersAndSaveAllIfNotExists()
@@ -34,6 +26,4 @@ public class OfferFacade {
         emailSenderFacade.sendJobOffersEmail(fetchAllOffersSaveAllIfNotExists(),
                 registerFacade.findEmailsAndIdsOfConfirmedUsers());
     }
-
-
 }
