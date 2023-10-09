@@ -55,10 +55,7 @@ public class ConfirmationTokenService {
     }
 
     private boolean isTokenConfirmed(ConfirmationToken confirmationToken) {
-        if (confirmationToken.getConfirmedAt() != null) {
-            return true;
-        }
-        return false;
+        return confirmationToken.getConfirmedAt() != null;
     }
 
     private boolean isTokenExpired(ConfirmationToken confirmationToken) {
