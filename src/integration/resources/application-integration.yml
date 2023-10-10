@@ -13,4 +13,5 @@ spring:
             enable: false
             required: false
 offer:
+  fetchOffersOcurrence: "*/5 * * * * *"
   sendEmailOcurrence: "*/7 * * * * * "

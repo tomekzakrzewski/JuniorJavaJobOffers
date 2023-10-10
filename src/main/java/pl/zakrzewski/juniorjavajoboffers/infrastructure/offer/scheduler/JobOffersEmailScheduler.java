@@ -17,4 +17,9 @@ public class JobOffersEmailScheduler {
         offerFacade.sendEmailWithJobOffers();
         log.info("sending job offers");
     }
+
+    @Scheduled(cron = "${offer.fetchOffersOcurrence}")
+    public void fetchJobOffers() {
+        offerFacade.fetchAllOffersSaveAllIfNotExists();
+    }
 }

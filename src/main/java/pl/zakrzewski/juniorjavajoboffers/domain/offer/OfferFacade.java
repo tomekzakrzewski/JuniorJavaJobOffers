@@ -27,7 +27,7 @@ public class OfferFacade {
                 registerFacade.findEmailsAndIdsOfConfirmedUsers());
     }
 
-    private List<OfferDto> getAllNewOffers() {
+    public List<OfferDto> getAllNewOffers() {
         return offerService.findAllNewAddedOffers();
     }
 

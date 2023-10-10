@@ -18,7 +18,6 @@ public class EmailSenderFacade {
         emailSenderService.sendConfirmationEmail(email, token);
     }
 
-    //scheduler
     public void sendJobOffersEmail(List<OfferDto> offers, List<UserIdEmailDto> users) {
         if (users.isEmpty())
             throw new ConfirmedUsersNotFound();
@@ -26,5 +25,4 @@ public class EmailSenderFacade {
             throw new OffersNotFound();
         emailSenderService.sendOffersEmail(users, offers);
     }
-
 }

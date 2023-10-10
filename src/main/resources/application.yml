@@ -41,7 +41,8 @@ spring:
     protocol: smtp
 #http
 offer:
-  sendEmailOcurrence: "0 00 16 * * *"
+  sendEmailOcurrence: "0 00 18 * * *"
+  fetchOffersOcurrence: "0 58 17 * * *"
   http:
     client:
       config:

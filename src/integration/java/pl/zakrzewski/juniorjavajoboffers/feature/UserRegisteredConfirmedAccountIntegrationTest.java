@@ -9,8 +9,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.zakrzewski.juniorjavajoboffers.BaseIntegrationTest;
 import pl.zakrzewski.juniorjavajoboffers.SampleOfferResponse;
+import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.OfferFetchable;
+import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.offer.dto.OfferResponse;
+import pl.zakrzewski.juniorjavajoboffers.domain.offer.exceptions.NewOffersNotFound;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterResultDto;
 
@@ -29,6 +32,9 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
 
     @Autowired
     OfferFetchable offerFetchable;
+
+    @Autowired
+    OfferFacade offerFacade;
 
     @Test
     public void should_user_register_and_confirm_account_and_system_send_job_offers() throws Exception {
@@ -64,16 +70,21 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
         );
 
 
-        // step 4: system fetches job offers at given time and sends email
-//
-//        await().atMost(20, TimeUnit.SECONDS)
-//                .pollInterval(Duration.ofSeconds(1L))
-//                .until(() -> {
-//                    try {
-//
-//                        List<OfferResponse> offers = offerFetchable.fetchOffersFromNofluffjobs();
-//                    }
-//                });
+        // step 4: system fetches job offers at given time
+        await().atMost(20, TimeUnit.SECONDS)
+                .pollInterval(Duration.ofSeconds(1L))
+                .until(() -> {
+                            try {
+                                List<OfferDto> result = offerFacade.getAllNewOffers();
+                                return !result.isEmpty();
+                            } catch (NewOffersNotFound e) {
+                                return false;
+                            }
+                        }
+                        );
+
+        // step 5: system sends email with job offers to user at given time
+        assertThat(greenMail.waitForIncomingEmail(TIMEOUT, 2)).isTrue();
 
 
         //step  : user made POST to /unsubscribe with ID and unsubscribed
