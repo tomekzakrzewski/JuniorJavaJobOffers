@@ -13,11 +13,6 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 class OfferService {
-    //todo
-    //fetch offer and save not existing ones
-    //fetch offers
-    //filter not existing ones
-    //getAllNewOffers - by date
     private final OfferFetchable client;
     private final OfferRepository offerRepository;
 
@@ -43,14 +38,12 @@ class OfferService {
         return offers;
     }
 
-
     private List<Offer> fetchOffers() {
         return client.fetchOffersFromNofluffjobs()
                 .stream()
                 .map(OfferMapper::mapFromOfferResponseToOffer)
                 .toList();
     }
-
 
     private List<Offer> filterNotExistingOffers(List<Offer> jobOffers) {
         return jobOffers.stream()
