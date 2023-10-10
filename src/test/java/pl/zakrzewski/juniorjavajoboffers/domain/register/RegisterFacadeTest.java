@@ -103,7 +103,6 @@ public class RegisterFacadeTest {
         RegisterResultDto registerResultDto = registerFacade.registerUser(registerRequestDto);
         ConfirmationTokenResultDto confirmationTokenResultDto =  registerFacade.confirmToken(registerResultDto.token());
         assertThat(registerFacade.findByToken(registerResultDto.token()).getConfirmedAt().equals(LocalDateTime.now()));
-
     }
 
     @Test

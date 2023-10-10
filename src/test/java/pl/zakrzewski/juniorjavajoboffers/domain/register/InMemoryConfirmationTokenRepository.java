@@ -60,7 +60,6 @@ public class InMemoryConfirmationTokenRepository implements ConfirmationTokenRep
     public void flush() {
 
     }
-
     @Override
     public <S extends ConfirmationToken> S saveAndFlush(S entity) {
         return null;

@@ -13,15 +13,6 @@ class UserMapper {
                 .build();
     }
 
-    public static User mapUserDtoToUser(UserDto userDto) {
-        return User.builder()
-                .id(userDto.id())
-                .username(userDto.username())
-                .email(userDto.mail())
-                .enabled(userDto.enabled())
-                .build();
-    }
-
     public static UserDto mapUserToUserDto(User user) {
         return UserDto.builder()
                 .id(user.getId())

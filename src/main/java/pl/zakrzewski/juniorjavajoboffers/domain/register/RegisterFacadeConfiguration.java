@@ -7,7 +7,6 @@ import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationToken
 
 @Configuration
 public class RegisterFacadeConfiguration {
-
     @Bean
     RegisterFacade registerFacade(RegisterRepository repository, EmailSenderFacade emailSenderFacade, ConfirmationTokenService confirmationTokenService) {
         return new RegisterFacade(repository, emailSenderFacade, confirmationTokenService);

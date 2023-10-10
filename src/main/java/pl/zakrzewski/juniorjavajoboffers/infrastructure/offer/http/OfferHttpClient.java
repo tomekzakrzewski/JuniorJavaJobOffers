@@ -43,5 +43,4 @@ public class OfferHttpClient implements OfferFetchable {
         log.info("Success");
         return body.getOffers();
     }
-
 }

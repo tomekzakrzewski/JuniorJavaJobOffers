@@ -18,5 +18,4 @@ public class ConfirmationTokenDto {
     private LocalDateTime confirmedAt;
     private LocalDateTime expiresAt;
     private User user;
-
 }

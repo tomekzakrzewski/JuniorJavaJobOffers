@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public class RegisterFacade {
-
     public static final String USER_WITH_THIS_EMAIL_HAS_ALREADY_SUBSCRIBED = "User with this email has already subscribed";
     private final RegisterRepository repository;
     private final EmailSenderFacade emailSenderFacade;
@@ -71,7 +70,6 @@ public class RegisterFacade {
         }
     }
 
-
     private boolean userExistsById(String id) {
         Optional<User> user =  repository.findById(id);
         return user.isPresent();
@@ -108,5 +106,4 @@ public class RegisterFacade {
     private ConfirmationToken saveConfirmationToken(ConfirmationToken confirmationToken) {
         return confirmationTokenService.saveConfirmationToken(confirmationToken);
     }
-
 }
