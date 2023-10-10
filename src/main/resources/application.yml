@@ -16,7 +16,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
   mvc:
     pathmatch:
-      matching-strategy:  ANT_PATH_MATCHER
+      matching-strategy: ANT_PATH_MATCHER
   #email config
   mail:
     host: smtp.gmail.com
