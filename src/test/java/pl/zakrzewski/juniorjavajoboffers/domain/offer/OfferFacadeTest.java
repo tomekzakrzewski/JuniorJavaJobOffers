@@ -59,21 +59,4 @@ public class OfferFacadeTest {
         List<OfferDto> response = offerFacade.fetchAllOffersSaveAllIfNotExists();
         assertThat(response.size()).isEqualTo(0);
     }
-
-    @Disabled
-    @Test
-    public void should_send_email_with_job_offers() {
-        OfferFacade offerFacade = new OfferFacadeTestConfiguration().offerFacadeForTests();
-        RegisterFacade registerFacade = mock(RegisterFacade.class);
-        EmailSenderFacade emailSenderFacade = mock(EmailSenderFacade.class);
-        List<OfferDto> offers = offerFacade.fetchAllOffersSaveAllIfNotExists();
-        List<UserIdEmailDto> users = List.of(
-                new UserIdEmailDto("tomek@gmail.com", UUID.randomUUID().toString())
-        );
-
-        when(registerFacade.findEmailsAndIdsOfConfirmedUsers()).thenReturn(users);
-        offerFacade.sendEmailWithJobOffers();
-        verify(emailSenderFacade).sendJobOffersEmail(offers, users);
-
-    }
 }

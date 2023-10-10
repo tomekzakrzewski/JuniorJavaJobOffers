@@ -16,17 +16,6 @@ public class OfferMapper {
                 .build();
     }
 
-    public static Offer mapOfferDtoToOffer(OfferDto offerDto) {
-        return Offer.builder()
-                .company(offerDto.getCompany())
-                .position(offerDto.getPosition())
-                .city(offerDto.getCity())
-                .salary(offerDto.getSalary())
-                .url(offerDto.getUrl())
-                .remote(offerDto.isRemote())
-                .build();
-    }
-
     public static Offer mapFromOfferResponseToOffer(OfferResponse offerResponse) {
         return Offer.builder()
                 .company(offerResponse.getName())
@@ -35,16 +24,6 @@ public class OfferMapper {
                 .url(offerResponse.getUrl())
                 .remote(offerResponse.getLocation().isFullyRemote())
                 .posted(offerResponse.getPosted())
-                .build();
-    }
-
-    public static OfferDto mapFromOfferResponseToOfferDto(OfferResponse offerResponse) {
-        return OfferDto.builder()
-                .company(offerResponse.getName())
-                .position(offerResponse.getTitle())
-                .salary(offerResponse.getSalary().getFrom().toString() + " - " + offerResponse.getSalary().getTo())
-                .url(offerResponse.getUrl())
-                .remote(offerResponse.getLocation().isFullyRemote())
                 .build();
     }
 }

@@ -14,5 +14,4 @@ import java.util.List;
 public class OfferList {
     @JsonProperty("postings")
     private List<OfferResponse> offers;
-
 }
