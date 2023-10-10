@@ -102,7 +102,6 @@ import static pl.zakrzewski.juniorjavajoboffers.domain.emailsender.utils.EmailSe
         return context;
     }
 
-
     private MimeMessageHelper getHelper(String subject, MimeMessage message) throws MessagingException {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
         helper.setPriority(1);
