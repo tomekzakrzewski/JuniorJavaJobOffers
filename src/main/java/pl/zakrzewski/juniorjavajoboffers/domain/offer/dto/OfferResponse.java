@@ -15,7 +15,6 @@ public class OfferResponse {
     private Salary salary;
     private Long posted;
 
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -30,6 +29,5 @@ public class OfferResponse {
         private Long from;
         private Long to;
     }
-
 }
 

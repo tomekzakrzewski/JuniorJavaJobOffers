@@ -27,6 +27,4 @@ public class OfferDto {
         return company + " " + position + " " +  salary + " " + "https://nofluffjobs.com/job/" + url +
                 " is remote: " + remote + "\n";
     }
-
-
 }

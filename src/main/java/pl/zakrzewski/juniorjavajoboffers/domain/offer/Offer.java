@@ -30,9 +30,6 @@ public class Offer {
     private Long posted;
     private LocalDate createdDate;
 
-    // if company name, position name and time posted is the same, offer is the same
-
-
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }

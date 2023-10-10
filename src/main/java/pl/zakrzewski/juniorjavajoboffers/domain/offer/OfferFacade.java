@@ -30,5 +30,4 @@ public class OfferFacade {
     public List<OfferDto> getAllNewOffers() {
         return offerService.findAllNewAddedOffers();
     }
-
 }
