@@ -135,20 +135,6 @@ public class RegisterFacadeTest {
         verify(emailSenderFacade).sendConfirmationEmail(result.email(), result.token());
     }
 
-    @Disabled
-    @Test
-    void should_token_expire_after_30_minutes() {
-        ConfirmationTokenRepository repository = mock(ConfirmationTokenRepository.class);
-        ConfirmationTokenService confirmationTokenService = new ConfirmationTokenService(repository);
-        ConfirmationToken confirmationToken = ConfirmationToken.builder()
-                .token(UUID.randomUUID().toString())
-                .expiresAt(LocalDateTime.now().minusMinutes(30))
-                .build();
-        String token = confirmationToken.getToken();
-        when(repository.findByToken(token)).thenReturn(Optional.of(confirmationToken));
-        registerFacade.confirmToken(token);
-    }
-
     @Test
     void should_throw_exception_if_confirmation_token_already_confirmed() {
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("tomek", "tomekatomek@gmail.com");
