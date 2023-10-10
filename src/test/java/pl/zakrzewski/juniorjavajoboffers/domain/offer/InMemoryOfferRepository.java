@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,21 +20,21 @@ public class InMemoryOfferRepository implements OfferRepository {
 
     Map<String, Offer> database = new ConcurrentHashMap<>();
     @Override
-    public boolean existsOfferByCompanyAndPosition(String company, String position) {
-        long count = database.values()
-                .stream()
-                .filter(offer -> offer.getCompany().equals(company) && offer.getPosition().equals(position))
-                .count();
-        return count == 1;
-    }
-
-    @Override
     public boolean existsOfferByCompanyAndPosted(String company, Long posted) {
         long count = database.values()
                 .stream()
                 .filter(offer -> offer.getCompany().equals(company) && offer.getPosted().equals(posted))
                 .count();
         return count == 1;
+    }
+
+    @Override
+    public Optional<List<Offer>> getOffersByCreatedDate(LocalDate date) {
+        List<Offer> offers = database.values()
+                .stream()
+                .filter(offer -> offer.getCreatedDate().equals(date))
+                .toList();
+        return Optional.of(offers);
     }
 
     @Override
@@ -51,6 +52,7 @@ public class InMemoryOfferRepository implements OfferRepository {
                 .url(entity.getUrl())
                 .city(entity.getCity())
                 .remote(entity.isRemote())
+                .createdDate(entity.getCreatedDate())
                 .build();
 
         database.put(offer.getId(), offer);

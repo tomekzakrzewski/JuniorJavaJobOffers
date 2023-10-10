@@ -23,7 +23,12 @@ public class OfferFacade {
     }
 
     public void sendEmailWithJobOffers() {
-        emailSenderFacade.sendJobOffersEmail(fetchAllOffersSaveAllIfNotExists(),
+        emailSenderFacade.sendJobOffersEmail(getAllNewOffers(),
                 registerFacade.findEmailsAndIdsOfConfirmedUsers());
     }
+
+    private List<OfferDto> getAllNewOffers() {
+        return offerService.findAllNewAddedOffers();
+    }
+
 }
