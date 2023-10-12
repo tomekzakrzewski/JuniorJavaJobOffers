@@ -1,7 +1,4 @@
-#database
 spring:
-  config:
-    import: env.properties
   main:
     allow-circular-references: true
   datasource:
