@@ -56,9 +56,6 @@ public class ConfirmationFacade {
 
     private boolean isTokenExpired(ConfirmationToken confirmationToken) {
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-        if (expiredAt.isBefore(LocalDateTime.now())) {
-            return true;
-        }
-        return false;
+        return expiredAt.isBefore(LocalDateTime.now());
     }
 }
