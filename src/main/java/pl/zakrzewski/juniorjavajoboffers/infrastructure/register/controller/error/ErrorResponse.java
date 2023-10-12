@@ -2,5 +2,5 @@ package pl.zakrzewski.juniorjavajoboffers.infrastructure.register.controller.err
 
 import org.springframework.http.HttpStatus;
 
-public record RegisterErrorResponse(String message, HttpStatus status) {
+public record ErrorResponse(String message, HttpStatus status) {
 }

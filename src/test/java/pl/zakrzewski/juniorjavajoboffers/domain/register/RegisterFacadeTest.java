@@ -1,28 +1,25 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.ConfirmationFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.InMemoryConfirmationTokenRepository;
-import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.dto.ConfirmationTokenDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.dto.ConfirmationTokenResultDto;
-import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.exceptions.TokenAlreadyConfirmed;
-import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.exceptions.TokenNotFoundException;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.*;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterResultDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.UserDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserAlreadyExistException;
+import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class RegisterFacadeTest {
     EmailSenderFacade emailSenderFacade = mock(EmailSenderFacade.class);
-    RegisterFacade registerFacade =  new RegisterFacade(
+    RegisterFacade registerFacade = new RegisterFacade(
             new InMemoryRegisterRepository(),
             emailSenderFacade,
             new ConfirmationFacade(new InMemoryConfirmationTokenRepository()));
@@ -75,28 +72,6 @@ public class RegisterFacadeTest {
             RegisterResultDto registerResultDto = registerFacade.registerUser(registerRequestDto);
         });
     }
-
-//    @Test
-//    void should_set_user_enabled_true_when_confirmed() {
-//        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
-//        RegisterResultDto registerResultDto = registerFacade.registerUser(registerRequestDto);
-//        ConfirmationTokenResultDto confirmationTokenResultDto = registerFacade.confirmToken(registerResultDto.token());
-//        assertThat(registerFacade.findByEmail("tomekatomek@gmail.com").enabled()).isTrue();
-//    }
-
-//    @Disabled
-//    @Test
-//    void should_find_all_emails_of_users_that_confirmed_account() {
-//        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Tomek", "tomekatomek@gmail.com");
-//        RegisterResultDto registerResultDto = registerFacade.registerUser(registerRequestDto);
-//        ConfirmationTokenResultDto confirmationTokenResultDto =  registerFacade.confirmToken(registerResultDto.token());
-//
-//        RegisterRequestDto registerRequestDtoSecond = new RegisterRequestDto("Damian", "domek@gmail.com");
-//        RegisterResultDto registerResultDtoSecond = registerFacade.registerUser(registerRequestDtoSecond);
-//
-//        assertThat(registerFacade.findEmailsAndIdsOfConfirmedUsers().size()).isEqualTo(1);
-//        assertThat(registerFacade.findEmailsAndIdsOfConfirmedUsers().stream().findFirst().equals("tomekatomek@gmail.com"));
-//    }
 
     @Test
     void should_delete_user_when_unsubscribing_from_newsletter() {

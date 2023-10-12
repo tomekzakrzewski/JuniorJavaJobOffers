@@ -34,13 +34,13 @@ public class RegisterControllerErrorIntegrationTest extends BaseIntegrationTest 
     public void should_return_409_conflict_when_user_with_the_given_email_already_exists() throws Exception {
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("abcd", "abcd@gmail.com");
 
-        ResultActions perform = mockMvc.perform(post("/api/v1/registration")
+        ResultActions perform = mockMvc.perform(post("/api/v1/register")
                 .content(objectMapper.writeValueAsString(registerRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
         );
         perform.andExpect(status().isCreated());
 
-        ResultActions perform1 = mockMvc.perform(post("/api/v1/registration")
+        ResultActions perform1 = mockMvc.perform(post("/api/v1/register")
                 .content(objectMapper.writeValueAsString(registerRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
         );
@@ -51,7 +51,7 @@ public class RegisterControllerErrorIntegrationTest extends BaseIntegrationTest 
     public void should_return_400_bad_requset_when_user_gave_invalid_email() throws Exception{
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("abcd", "abcd");
 
-        ResultActions perform = mockMvc.perform(post("/api/v1/registration")
+        ResultActions perform = mockMvc.perform(post("/api/v1/register")
                 .content(objectMapper.writeValueAsString(registerRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
         );
@@ -62,7 +62,7 @@ public class RegisterControllerErrorIntegrationTest extends BaseIntegrationTest 
     public void should_return_409_conflict_when_token_already_confirmed() throws Exception {
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("abcd", "abcde@gmail.com");
 
-        ResultActions perform = mockMvc.perform(post("/api/v1/registration")
+        ResultActions perform = mockMvc.perform(post("/api/v1/register")
                 .content(objectMapper.writeValueAsString(registerRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
         );
@@ -72,14 +72,13 @@ public class RegisterControllerErrorIntegrationTest extends BaseIntegrationTest 
         RegisterResultDto registerResultDto = objectMapper.readValue(json, RegisterResultDto.class);
         String token = registerResultDto.token();
 
-        ResultActions successConfirmToken = mockMvc.perform(get("/api/v1/registration?token=" + token)
+        ResultActions successConfirmToken = mockMvc.perform(get("/api/v1/confirm?token=" + token)
                 .contentType(MediaType.APPLICATION_JSON));
         successConfirmToken.andExpect(status().isOk());
 
-        ResultActions errorConfirmToken = mockMvc.perform(get("/api/v1/registration?token=" + token)
+        ResultActions errorConfirmToken = mockMvc.perform(get("/api/v1/confirm?token=" + token)
                 .contentType(MediaType.APPLICATION_JSON));
         errorConfirmToken.andExpect(status().isConflict());
     }
-
 
 }

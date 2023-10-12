@@ -12,4 +12,5 @@ import java.time.LocalDateTime;
 public class ConfirmationTokenResultDto {
     private String token;
     private LocalDateTime confirmedAt;
+    private String email;
 }

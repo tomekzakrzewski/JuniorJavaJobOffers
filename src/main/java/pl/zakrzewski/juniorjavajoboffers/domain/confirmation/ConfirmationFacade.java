@@ -44,10 +44,10 @@ public class ConfirmationFacade {
             throw new TokenAlreadyConfirmed(token);
         if (isTokenExpired(confirmationToken))
             throw new TokenHasExpired(token);
-
+        String email = confirmationToken.getUser().getEmail();
         LocalDateTime confirmedAt = LocalDateTime.now();
         confirmationTokenRepository.updateConfirmedAt(token, confirmedAt);
-        return new ConfirmationTokenResultDto(token, confirmedAt);
+        return new ConfirmationTokenResultDto(token, confirmedAt, email);
     }
 
     private boolean isTokenConfirmed(ConfirmationToken confirmationToken) {

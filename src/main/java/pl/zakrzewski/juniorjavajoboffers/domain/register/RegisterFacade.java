@@ -43,6 +43,10 @@ public class RegisterFacade {
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
+    public void setUserEnabledByEmail(String email) {
+        repository.enableUser(email);
+    }
+
     public List<UserIdEmailDto> findEmailsAndIdsOfConfirmedUsers() {
         return repository.getUserByEnabledTrue()
                 .stream()

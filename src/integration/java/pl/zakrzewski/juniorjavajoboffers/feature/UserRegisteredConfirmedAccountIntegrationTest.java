@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrationTest implements SampleOfferResponse {
-    private static int TIMEOUT = 5000;
+    private final static int TIMEOUT = 5000;
 
     @Autowired
     OfferFetchable offerFetchable;
@@ -51,7 +51,7 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
 
         // step 2: user made POST to /register with username=Tomek and email=tomek@gmail.com and recived confirmation mail
         RegisterRequestDto request = new RegisterRequestDto("Tomek", "tomek@gmail.com");
-        ResultActions successRegisterRequest = mockMvc.perform(post("/api/v1/registration")
+        ResultActions successRegisterRequest = mockMvc.perform(post("/api/v1/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
@@ -64,7 +64,7 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
 
 
         // step 3: user made GET to /registration?token= with generated token and confirmed account
-        ResultActions successConfirmToken = mockMvc.perform(get("/api/v1/registration?token=" + token)
+        ResultActions successConfirmToken = mockMvc.perform(get("/api/v1/confirm?token=" + token)
                 .contentType(MediaType.APPLICATION_JSON));
         MvcResult confirmTokenResult = successConfirmToken.andExpect(status().isOk()).andReturn();
 
@@ -89,7 +89,7 @@ public class UserRegisteredConfirmedAccountIntegrationTest extends BaseIntegrati
 
         //step 6: user made POST to /unsubscribe with ID and unsubscribed
         String userId = registerResultDto.id();
-        ResultActions successUnsubscribe = mockMvc.perform(post("/api/v1/registration/unsubscribe?id=" + userId)
+        ResultActions successUnsubscribe = mockMvc.perform(post("/api/v1/unsubscribe?id=" + userId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         successUnsubscribe.andExpect(status().isNoContent());
