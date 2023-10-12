@@ -1,6 +1,7 @@
 /target/
 HELP.md
 /.idea
+.attach_pid74090
 .mvn
 mvnw
 mvnw.cmd
