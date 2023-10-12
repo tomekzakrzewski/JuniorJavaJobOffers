@@ -5,26 +5,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.RegisterFacade;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenResultDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.dto.ConfirmationTokenResultDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterRequestDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.RegisterResultDto;
 
 @RestController
-@RequestMapping("/api/v1/registration")
+@RequestMapping("/api/v1")
 @AllArgsConstructor
 public class RegisterController {
     private final RegisterFacade registerFacade;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<RegisterResultDto> registerUser(@RequestBody RegisterRequestDto request) {
         RegisterResultDto result = registerFacade.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
-    }
-
-    @GetMapping
-    public ResponseEntity<ConfirmationTokenResultDto> confirmUserAccount (@RequestParam("token") String token) {
-        ConfirmationTokenResultDto confirmationTokenResultDto = registerFacade.confirmToken(token);
-        return ResponseEntity.ok(confirmationTokenResultDto);
     }
 
     @PostMapping("/unsubscribe")

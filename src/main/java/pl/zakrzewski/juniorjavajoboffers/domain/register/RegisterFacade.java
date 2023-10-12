@@ -1,32 +1,33 @@
 package pl.zakrzewski.juniorjavajoboffers.domain.register;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.ConfirmationFacade;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.dto.ConfirmationTokenResultDto;
 import pl.zakrzewski.juniorjavajoboffers.domain.emailsender.EmailSenderFacade;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.*;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.InvalidEmailAddressException;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.TokenNotFoundException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserAlreadyExistException;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.UserNotFoundException;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationToken;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenMapper;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenService;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.ConfirmationToken;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Component
 public class RegisterFacade {
     public static final String USER_WITH_THIS_EMAIL_HAS_ALREADY_SUBSCRIBED = "User with this email has already subscribed";
     private final RegisterRepository repository;
     private final EmailSenderFacade emailSenderFacade;
-    private final ConfirmationTokenService confirmationTokenService;
+    private final ConfirmationFacade confirmationFacade;
 
     public RegisterResultDto registerUser(RegisterRequestDto registerRequestDto) {
         if (validateEmail(registerRequestDto.mail())) {
             if (!userExistsByEmail(registerRequestDto.mail())) {
                 User user = saveUser(registerRequestDto);
-                ConfirmationToken confirmationToken = confirmationTokenService.generateConfirmationToken(user);
-                ConfirmationToken tokenSaved = saveConfirmationToken(confirmationToken);
+                ConfirmationToken confirmationToken = confirmationFacade.generateConfirmationToken(user);
+                ConfirmationToken tokenSaved = confirmationFacade.saveConfirmationToken(confirmationToken);
                 sendConfirmationEmail(user.getEmail(), tokenSaved.getToken());
                 return registrationResult(user, tokenSaved);
             } else {
@@ -42,18 +43,6 @@ public class RegisterFacade {
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
-    public ConfirmationTokenDto findByToken(String token) {
-        return confirmationTokenService.getToken(token)
-                .map(ConfirmationTokenMapper::mapConfirmationTokenToConfirmationTokenDto)
-                .orElseThrow(() -> new TokenNotFoundException(token));
-    }
-
-    public ConfirmationTokenResultDto confirmToken(String token) {
-        ConfirmationTokenResultDto confirmationTokenResultDto = confirmationTokenService.confirmToken(token);
-        repository.enableUser(confirmationTokenService.getToken(token).get().getUser().getEmail());
-        return confirmationTokenResultDto;
-    }
-
     public List<UserIdEmailDto> findEmailsAndIdsOfConfirmedUsers() {
         return repository.getUserByEnabledTrue()
                 .stream()
@@ -63,7 +52,7 @@ public class RegisterFacade {
 
     public String deleteUserAndConfirmationToken(String id) {
         if (userExistsById(id)) {
-            confirmationTokenService.deleteConfirmationTokenByUserId(id);
+            confirmationFacade.deleteConfirmationTokenByUserId(id);
             return repository.deleteUserById(id);
         } else {
             throw new UserNotFoundException(id);
@@ -101,9 +90,5 @@ public class RegisterFacade {
     private User saveUser(RegisterRequestDto registerRequestDto) {
         User user = UserMapper.mapRegisterUserDtoToUser(registerRequestDto);
         return repository.save(user);
-    }
-
-    private ConfirmationToken saveConfirmationToken(ConfirmationToken confirmationToken) {
-        return confirmationTokenService.saveConfirmationToken(confirmationToken);
     }
 }

@@ -1,4 +1,4 @@
-package pl.zakrzewski.juniorjavajoboffers.domain.register.token;
+package pl.zakrzewski.juniorjavajoboffers.domain.confirmation;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,7 +7,6 @@ import org.springframework.data.annotation.CreatedDate;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.User;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter

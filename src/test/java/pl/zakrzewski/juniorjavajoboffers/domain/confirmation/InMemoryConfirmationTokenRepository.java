@@ -1,12 +1,12 @@
-package pl.zakrzewski.juniorjavajoboffers.domain.register;
+package pl.zakrzewski.juniorjavajoboffers.domain.confirmation;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationToken;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.token.ConfirmationTokenRepository;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.ConfirmationToken;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.ConfirmationTokenRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

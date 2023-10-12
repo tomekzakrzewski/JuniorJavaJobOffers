@@ -1,4 +1,4 @@
-package pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions;
+package pl.zakrzewski.juniorjavajoboffers.domain.confirmation.exceptions;
 
 public class TokenNotFoundException extends RuntimeException {
     public TokenNotFoundException(String token) {

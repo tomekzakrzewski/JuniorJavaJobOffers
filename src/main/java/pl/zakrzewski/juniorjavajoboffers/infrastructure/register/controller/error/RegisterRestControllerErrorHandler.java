@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.exceptions.TokenAlreadyConfirmed;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.exceptions.TokenHasExpired;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions.*;
 
 @ControllerAdvice

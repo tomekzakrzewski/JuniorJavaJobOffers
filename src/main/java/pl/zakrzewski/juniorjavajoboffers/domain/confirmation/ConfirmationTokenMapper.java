@@ -1,6 +1,6 @@
-package pl.zakrzewski.juniorjavajoboffers.domain.register.token;
+package pl.zakrzewski.juniorjavajoboffers.domain.confirmation;
 
-import pl.zakrzewski.juniorjavajoboffers.domain.register.dto.ConfirmationTokenDto;
+import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.dto.ConfirmationTokenDto;
 
 public class ConfirmationTokenMapper {
 

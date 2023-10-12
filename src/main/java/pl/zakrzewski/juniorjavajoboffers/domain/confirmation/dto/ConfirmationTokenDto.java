@@ -1,8 +1,7 @@
-package pl.zakrzewski.juniorjavajoboffers.domain.register.dto;
+package pl.zakrzewski.juniorjavajoboffers.domain.confirmation.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.zakrzewski.juniorjavajoboffers.domain.register.User;
 

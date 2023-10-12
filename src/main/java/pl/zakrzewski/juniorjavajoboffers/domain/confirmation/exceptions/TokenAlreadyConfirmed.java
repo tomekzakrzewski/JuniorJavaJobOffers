@@ -1,4 +1,4 @@
-package pl.zakrzewski.juniorjavajoboffers.domain.register.exceptions;
+package pl.zakrzewski.juniorjavajoboffers.domain.confirmation.exceptions;
 
 public class TokenAlreadyConfirmed extends RuntimeException {
     public TokenAlreadyConfirmed(String token) {

@@ -1,11 +1,10 @@
-package pl.zakrzewski.juniorjavajoboffers.domain.register.token;
+package pl.zakrzewski.juniorjavajoboffers.domain.confirmation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import pl.zakrzewski.juniorjavajoboffers.domain.register.User;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
