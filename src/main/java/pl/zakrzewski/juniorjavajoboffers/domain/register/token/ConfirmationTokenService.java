@@ -47,7 +47,6 @@ public class ConfirmationTokenService {
                 .expiresAt(LocalDateTime.now().plusMinutes(30))
                 .user(user)
                 .build();
-
     }
 
     public void deleteConfirmationTokenByUserId(String userId) {
