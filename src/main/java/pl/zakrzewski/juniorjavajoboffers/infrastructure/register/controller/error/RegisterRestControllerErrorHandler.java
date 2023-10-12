@@ -30,15 +30,6 @@ public class RegisterRestControllerErrorHandler {
         return new RegisterErrorResponse(message, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public RegisterErrorResponse handleUserNotFound(UserNotFoundException exception) {
-        String message = exception.getMessage();
-        log.error(message);
-        return new RegisterErrorResponse(message, HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(TokenAlreadyConfirmed.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -51,7 +42,7 @@ public class RegisterRestControllerErrorHandler {
     @ExceptionHandler(TokenHasExpired.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public RegisterErrorResponse handleTokenAlreadyConfirmed(TokenHasExpired exception) {
+    public RegisterErrorResponse handleTokenHasExpired(TokenHasExpired exception) {
         String message = exception.getMessage();
         log.error(message);
         return new RegisterErrorResponse(message, HttpStatus.UNAUTHORIZED);
