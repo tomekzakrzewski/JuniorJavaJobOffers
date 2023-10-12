@@ -1,5 +1,7 @@
-#databas
+#database
 spring:
+  config:
+    import: env.properties
   main:
     allow-circular-references: true
   datasource:
@@ -21,8 +23,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: juniorjavajoboffers@gmail.com
-    password: pfhdvtnmwkwzizgv
+    username: EMAIL_ADDRESS 
+    password: EMAIL_PASSWORD
     default-encoding: UTF-8
     properties:
       mail:

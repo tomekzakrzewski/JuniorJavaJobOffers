@@ -5,6 +5,7 @@ HELP.md
 .mvn
 mvnw
 mvnw.cmd
+env.properties
 !.mvn/wrapper/maven-wrapper.jar
 # Java annotation processor (APT)
 .factorypath
