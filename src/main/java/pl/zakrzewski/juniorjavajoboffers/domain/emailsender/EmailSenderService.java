@@ -25,7 +25,7 @@ import static pl.zakrzewski.juniorjavajoboffers.domain.emailsender.utils.EmailSe
 @Service
 @RequiredArgsConstructor
 @Log4j2
- class EmailSenderService {
+class EmailSenderService {
     private static final String USER_ACCOUNT_VERIFICATION = "Confirm your account";
     private static final String JOB_OFFERS = "Job offers for junior java developer position";
     private static final String UTF_8_ENCODING = "UTF-8";

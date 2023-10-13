@@ -2,7 +2,7 @@ package pl.zakrzewski.juniorjavajoboffers.domain.confirmation;
 
 import pl.zakrzewski.juniorjavajoboffers.domain.confirmation.dto.ConfirmationTokenDto;
 
-public class ConfirmationTokenMapper {
+class ConfirmationTokenMapper {
 
     public static ConfirmationTokenDto mapConfirmationTokenToConfirmationTokenDto(ConfirmationToken confirmationToken) {
         return ConfirmationTokenDto.builder()
