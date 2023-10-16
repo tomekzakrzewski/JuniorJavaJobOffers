@@ -2,7 +2,7 @@
 
 Subscribe to the newsletter, confirm your account, and always be up to date with job offers.
 
-- Modular monolith hexahonal architecture
+- Modular monolith hexagonal architecture
 - Scheduled fetching offers from external api
 - Scheduled sending email with job offers
 - Controllers tested via mockMvc
@@ -10,8 +10,8 @@ Subscribe to the newsletter, confirm your account, and always be up to date with
 
 # Tech stack
 
-Backend: 'Java 17', 'Spring (Spring Boot, Spring Boot Mail, Spring Data)', 'Hibernate', 'MySQL', 'Docker'
-Test: 'JUnit 5, 'AssertJ', 'Mockito', 'Test Containers', 'Mock Mvc', 'WireMock', 'Awaitility', 'Greenmail'
+Backend: `Java 17`, `Spring (Spring Boot, Spring Boot Mail, Spring Data)`, `Hibernate`, `MySQL`, `Docker`
+Test: `JUnit 5`, `AssertJ`, `Mockito`, `Test Containers`, `Mock Mvc`, `WireMock`, `Awaitility`, `Greenmail`
 
 # Swagger
 
