@@ -19,10 +19,10 @@ import java.util.List;
 @AllArgsConstructor
 @Log4j2
 public class OfferHttpClient implements OfferFetchable {
-
     private final RestTemplate restTemplate;
     private final CriteriaSearch criteriaSearch;
     private final String uri;
+
     public List<OfferResponse> fetchOffersFromNofluffjobs() {
         log.info("Started fetching offers from NoFluffJobs");
         HttpHeaders headers = new HttpHeaders();
